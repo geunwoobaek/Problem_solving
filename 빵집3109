@@ -1,0 +1,51 @@
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+bool visit[10001][501];
+int R,C,cnt=0;
+int dy[3]={-1,0,1};
+vector<string> A;
+bool check=true;
+void dfs(int y,int x)
+{	if(check)
+	{
+	if(x==C)
+	{	
+		check=false;
+		cnt++;
+		return ;
+	}
+	for(int i=0;i<3;i++)
+	{
+		int next_x=x+1;
+		int next_y=y+dy[i];
+		if(check&&next_y>0&&next_y<=R&&!visit[next_y][next_x]&&A[next_y][next_x]!='x')	
+		{
+		visit[next_y][next_x]=true;
+		dfs(next_y,next_x);	
+		}	
+	}
+	}
+}
+int main()
+{
+ios_base::sync_with_stdio(false);
+cin.tie(0);
+cin>>R>>C;
+A.resize(R+1);
+for(int i=1;i<=R;i++)
+{	
+	cin>>A[i];
+	A[i].insert(A[i].begin(),'_');
+}
+
+for(int i=1;i<=R;i++)
+{
+	visit[i][1]=true;
+	check=true;
+	dfs(i,1);
+}
+cout<<cnt;
+return 0;
+}
