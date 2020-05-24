@@ -27,7 +27,7 @@ for(int i=0;i<K;i++)
             memset(check,false,sizeof(check));
             for(int j=i+1;j<K;j++) //한번도 사용하지 않거나 마지막에 사용한것찾기
             {
-                if(visit[order[j]])
+                if(visit[order[j]]&&!check[order[j]])
                 {
                     last_index=order[j];
                     check[order[j]]=true;
