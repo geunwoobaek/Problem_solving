@@ -1,16 +1,17 @@
 #include<iostream>
 #include<cstring>
 #include<algorithm>
+#include<string>
 #include<map>
 using namespace std;
 int N, T;
-map<string, int> Cache;
 int cnt[100002];
-int parent[100001];
+int parent[100002];
+map<string, int> Cache;
 int find_parent(int a)
 {
     if (parent[a] == a) return a;
-    else return parent[a]=parent[parent[a]];
+    else return parent[a]=find_parent(parent[a]);
 }
 int merge(int a, int b)
 {
@@ -34,7 +35,7 @@ int main()
         cin >> N;
         int idx = 1;
         string A, B;
-        Cache.clear();
+        map<string, int> Cache;
         fill(parent, parent + 100002, 0);
         fill(cnt, cnt + 100002, 1);
         for (int i = 0;i < N;i++)
@@ -49,8 +50,8 @@ int main()
             if (b == 0) {
                 b = parent[idx] = idx;
                 idx++;
-            }   
-            printf("%d\n",merge(a,b));
+            }
+            printf("%d\n", merge(a, b));
         }
     }
     return 0;
