@@ -12,6 +12,7 @@ int find_parent(int a)
 {
     if (parent[a] == a) return a;
     else return parent[a]=find_parent(parent[a]);
+
 }
 int merge(int a, int b)
 {
