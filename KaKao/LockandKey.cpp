@@ -34,7 +34,7 @@ bool compare(vector<int> bitlock, vector<int> bitkey) //자리수 이동
                 if (i<keysize)
                 {
                     if ((bitkey2[i] ^ bitlock[i]) != full) break;
-                }
+                    }
                 else {
                     if (bitlock[i] != full) break;
                 }
