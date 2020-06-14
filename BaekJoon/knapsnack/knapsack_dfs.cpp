@@ -5,15 +5,14 @@ using namespace std;
 int N,W;
 vector<pair<int,int>> bag;
 int Maximum=0;
-int DP[100][100001];//n번째까지넣은 가방무게
+int DP[100][100];//n번째까지넣은 가방무게
 int dfs(int start,int w)
-{   if(w>=W||start==N) return 0;
+{   if(w>W) return -10000000; 
+    if(start==N) return 0;
     int &result=DP[start][w];
     if(result!=-1) return result;
     result=0;
-    int compare2=0;
-    if(w+bag[start].first<=W) compare2=dfs(start+1,w+bag[start].first)+bag[start].second;
-    return result=max(dfs(start+1,w),compare2);
+    return result=max(dfs(start+1,w),dfs(start+1,w+bag[start].first)+bag[start].second);
 }
 int main()
 {
