@@ -4,7 +4,8 @@
 using namespace std;
 int N,W;
 int visit[100][100001];
-int Maximum=0;
+int DP[100][1000001];//n번째까지넣은 가방무게
+int Maximum;
 struct order{
     int weight,value,number;
 };
