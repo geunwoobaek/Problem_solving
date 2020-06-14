@@ -44,7 +44,7 @@ int main()
 	scanf("%d",&N);
 	arr2 = new int[N];
 	for (int i=0;i<N;i++) scanf("%d",&arr[i]);
-
+	
 	partition(0, N - 1);
 
 	for (int i=0;i<N;i++) printf("%d\n",arr[i]) ;
