@@ -1,8 +1,9 @@
 #include<iostream>
 #include<vector>
+#include<math.h>
 using namespace std;
-int max(int a,int b){return a>b?a:b;}
 int N,W;
+int visit[1<<100+1]; //방문노드명단 // 무게
 int DP[100001];
 int Maximum=0;
 vector<pair<int,int>> Bag;
@@ -20,9 +21,10 @@ for(int i=0;i<N;i++)
     for(int j=0;Bag[i].first+j<=W;j++)
     {
         int &result=DP[Bag[i].first+j];
-        result=max(result,Bag[i].second,DP[j]);
+        result=max(result,Bag[i].second+DP[j]);//중복들어가면 안됨
         if(result>Maximum) Maximum=result;
     }
 }
-cout<<Maximum;
+
+return 0;
 }
