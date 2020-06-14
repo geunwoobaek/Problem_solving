@@ -3,8 +3,7 @@
 #include<math.h>
 using namespace std;
 int N,W;
-int visit[1<<100+1]; //방문노드명단 // 무게
-int DP[100][100];//n번째까지넣은 가방무게
+int DP[100][100001];//n번째까지넣은 가방무게
 int Maximum=0;
 vector<pair<int,int>> Bag;
 int main()
