@@ -22,7 +22,7 @@ for(int i=1;i<=N;i++)
         DP[i][j]=DP[i-1][j];
         if(j>=Bag[i].first)
         {
-            DP[i][j]=max(DP[i][j],Bag[i].second+DP[i-1][j-Bag[i].second]);
+            DP[i][j]=max(DP[i][j],Bag[i].second+DP[i-1][j-Bag[i].first]);
         }
     }
 }
