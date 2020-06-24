@@ -5,14 +5,16 @@
 #include<vector>
 int **path;
 using namespace std;
+
 struct Node{
 int value; //현재값
 vector<int> ordering; //순서
 int visit;
 };
+
 struct compare{
     bool operator()(Node A,Node B)
-    {
+    {   if(A.value==B.value) return A.ordering.size()<B.ordering.size();
         return A.value>B.value;
     }
 };
@@ -37,7 +39,7 @@ void echo(Node n)
     cout<<endl;
     cout<<"총 탐색비용은 "<<n.value<<endl;
 }
-void test()
+void resonable_bound_function()
 {
    while(1)
    {
@@ -56,6 +58,7 @@ void test()
     Node now =que.top();
     que.pop();
     echo(now);
+    if(now.value>Lowest) {cout<<"lower_bound 보다 크거나 같습니다"<<endl; continue;}
     if(now.ordering.size()==n)
     {   now.value+=path[now.ordering.back()][0];
         now.ordering.push_back(0);
@@ -66,7 +69,7 @@ void test()
             cout<<"변경된 Lowerbound값은 "<<Lowest<<endl;
         }
         else{
-            cout<<"lower_bound 보다 큽니다"<<endl;
+            cout<<"lower_bound 보다 크거나 같습니다"<<endl;
         }
         continue;
     }
@@ -76,7 +79,7 @@ void test()
         temp.value+=path[temp.ordering.back()][i];
         if((temp.visit&1<<i)!=0) continue;
         if(temp.value>Lowest) {
-            cout<<"lower_bound 보다 큽니다"<<endl;
+            cout<<temp.value<<"는 lower_bound인"<<Lowest<<"보다 큽니다"<<endl;
             continue;
         }
         temp.visit+=1<<i; 
@@ -90,6 +93,6 @@ void test()
 int main()
 {  ios_base::sync_with_stdio(false);
    cin.tie(NULL);
-   test();
+   resonable_bound_function();
    return 0;
 }
