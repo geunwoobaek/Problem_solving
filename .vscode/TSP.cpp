@@ -39,14 +39,13 @@ return lower_bound;
 }
 void echo(Node n)
 {
-  /*  printf("%d 현재 탐색노드는",Cnt++);
+    printf("%d 현재 탐색노드는",Cnt++);
     for(int i=0;i<n.ordering.size();i++){
         printf("%d -> ",n.ordering[i]);
     } 
     printf("\n");
     printf("lower_bound= %d, 탐색비용은 %d\n",n.lower_bound,n.value);
-    */
-   ;
+    
 }
 void resonable_bound_function()
 {  
@@ -79,10 +78,10 @@ void resonable_bound_function()
         if(now.value<Lowest)
         {   
             Lowest=now.value;
-      //      printf("갱신된 Lowerbound(갱신값)은 %d\n",Lowest);
+            printf("갱신된 Lowerbound(갱신값)은 %d\n",Lowest);
         }
         else{
-    //      printf("lower_bound 보다 크거나 같습니다\n");
+          printf("lower_bound 보다 크거나 같습니다\n");
         }
         continue;
     }
@@ -93,7 +92,7 @@ void resonable_bound_function()
         temp.value+=path[temp.ordering.back()][i];
         temp.lower_bound+=(path[temp.ordering.back()][i]-low[temp.ordering.back()]);
         if(temp.value>=Lowest||temp.lower_bound>=Lowest) {
-     //       printf("lowerbound %d 가 최대 lower_bound인  %d보다 크거나 같습니다\n",temp.lower_bound,Lowest);
+            printf("lowerbound %d 가 최대 lower_bound인  %d보다 크거나 같습니다\n",temp.lower_bound,Lowest);
             continue;
         }
         temp.visit+=1<<i; 
