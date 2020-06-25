@@ -14,8 +14,8 @@ int visit;
 };
 struct compare{
     bool operator()(Node A,Node B)
-    {  
-        if(A.lower_bound==B.lower_bound) return A.ordering.size()<B.ordering.size();
+    {   
+       if(A.lower_bound==B.lower_bound) return A.value<B.value;
         return A.lower_bound>B.lower_bound;
     }
 };
@@ -38,7 +38,7 @@ for(int i=1;i<=n;i++)
 return lower_bound;
 }
 void echo(Node n)
-{
+{   Cnt++;
     printf("%d 현재 탐색노드는",Cnt++);
     for(int i=0;i<n.ordering.size();i++){
         printf("%d -> ",n.ordering[i]);
@@ -55,8 +55,8 @@ void resonable_bound_function()
     int n;
     cin>>n;
     if(n==0) return;
-    vector<int> low(n+1);
-    vector<int> order(1,1);
+    vector<int> low(n+1); //Lower_bound계산위한 배열
+    vector<int> order(1,1); //탐색순서를 저장
     Node first={0,0,order,1}; //첫번째노드넣기
     first.lower_bound=initial(n,low);
     first.value=path[1][1];
@@ -67,9 +67,11 @@ void resonable_bound_function()
     {
     Node now =que.top();
     que.pop();
+    if(now.value>=Lowest||now.lower_bound>=Lowest) {
+    printf("현재 탐색경로의 lower_bound는 갱신된 값보다 크거나 같습니다\n");
+    continue;
+    }
     echo(now);
-    if(now.value>=Lowest||now.lower_bound>=Lowest) {//printf("현재 탐색경로의 lower_bound는 갱신된 값보다 크거나 같습니다\n");
-     continue;}
     if(now.ordering.size()==n)
     {   now.value+=path[now.ordering.back()][1];
         now.lower_bound+=path[now.ordering.back()][1];
@@ -100,7 +102,7 @@ void resonable_bound_function()
         que.push(temp);
     }
     }
-    printf("가장적은 비용은 %d\n",Lowest);
+    printf("탐색횟수는 %d,가장장적은 비용은 %d\n",Cnt,Lowest);
    }
 }
 int main()
