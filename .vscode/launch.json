@@ -6,8 +6,11 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-      "args": [],
-      "serverLaunchTimeout": "5000000",
+      "args": [
+        "--timeout " , 
+        "999999 " , 
+      ],
+      "serverLaunchTimeout":123456789,
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
