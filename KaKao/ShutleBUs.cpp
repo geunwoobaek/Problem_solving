@@ -45,7 +45,9 @@ string solution(int n, int t, int m, vector<string> timetable)
             count++; //누적으로 탑승한 크루의수
             degree++;
             if (count == Hour.size()) //모든 크루가 탑승했을시
-                day = n;
+                {   if(day!=n) degree=0;
+                    day = n;
+                }
         }
         if (day == n) //탈수있는 마지막 버스
         {
@@ -63,11 +65,9 @@ string solution(int n, int t, int m, vector<string> timetable)
 }
 int main()
 {
-    vector<string> str(5);
-    str[0] = "15:00";
-    str[1] = "15:05";
-    str[2] = "15:09";
-    str[3] = "15:15";
-    str[4] = "15:20";
-    cout << solution(10, 10, 1, str);
+    vector<string> str(2);
+    str[0] = "08:09";
+    str[1] = "08:09";
+
+    cout << solution(2, 10, 2, str);
 }
