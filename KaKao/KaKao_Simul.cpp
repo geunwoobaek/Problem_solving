@@ -7,7 +7,7 @@ using namespace std;
 //x,y,a(종류),명령타입
 int Map[101][101]; //0이면 기둥 1이면 보 2이면 두개다
 //x와y좌표순으로 담고있다
-bool compare(vector<int> a, vector<int> b)
+bool compare(vector<int>& a, vector<int>& b)
 {
     if (a[0] != b[0])
         return a[0] < b[0];
@@ -16,26 +16,23 @@ bool compare(vector<int> a, vector<int> b)
     else
         return a[2] < b[2];
 }
-void simulation(int limit, vector<int> &command)
+void simulation(int limit, vector<int>& command)
 {
     int x = command[0];
     int y = command[1];
     //보는 항상 기둥위에있다 기둥의 y=k 보는 k+1
-    if (command[3] == '0') //삭제
+    if (command[3] == 0) //삭제
     {
-        if (Map[x][y] != command[2] || Map[x][y] != 2) //아무것도 삭제할게 없을경우에 끝냄
-            return;
         if (command[2] == 0) //기둥
         {
-            int &nowColum = Map[x][y];
-            if (y == limit - 1)
-                return;                                                    //범위넘어설때
-            if (Map[x][y + 1] == -1 && (x == 0 || Map[x - 1][y + 1] != 1)) //위에 아무것도없을시
+            int& nowColum = Map[x][y];                                           //범위넘어설때
+            if (Map[x][y + 1] == -1 && (x < 1 || Map[x - 1][y + 1] < 1)) //위에 아무것도없을시
             {
-                nowColum--;
+                nowColum-=(command[2]+1);
             }
+
             else //위에 뭐가있을경우
-            {
+            {   if(Map[x][y+1]==0) return; //바로위에 벽이있을때
                 //위에 두개가 다있을경우
                 if (x > 0 && Map[x][y + 1] != -1 && Map[x - 1][y + 1] != -1)
                 {
@@ -45,48 +42,46 @@ void simulation(int limit, vector<int> &command)
                     bool left_condition = false;
                     while (Map[right][y + 1] != -1)
                     {
-                        if (Map[right][y + 1] == 0 || Map[right++][y + 1] == 2)
+                        if (Map[right++][y] % 2 == 0)
                         {
                             right_condition = true;
                             break;
                         }
                     }
-                    if (!right_condition)
-                        return;
-                    while (left > 0 && Map[left][y + 1] != -1)
+                    if (!right_condition) return;
+                    while (left >= 0 && Map[left][y + 1] != -1)
                     {
-                        if (Map[left][y + 1] == 0 || Map[left--][y + 1] == 2)
+                        if (Map[left--][y] % 2 == 0)
                         {
                             left_condition = true;
                             break;
                         }
                     }
-                    if (!left_condition)
-                        return;
+                    if (!left_condition) return;
                 }
                 //위에 하나만있을경우
                 else
                 {
-                    if ((x > 0 && Map[x - 1][y + 1] == 1) && (Map[x - 1][y] != 2 || Map[x - 1][y] != 0))
+                    if ((x > 0 && Map[x - 1][y + 1]>0) &&Map[x-1][y]%2!=0)
                         return; //왼쪽기둥
-                    else if (Map[x - 1][y] != 0 && Map[x - 1][y] != 2)
+                    else if ((x < limit && Map[x][y + 1]>0) &&Map[x+1][y]%2!=0)
                         return; //오른쪽기둥
                 }
             }
-            nowColum--;
+            nowColum-=(command[2]+1);
         }
         else //보
         {
-            int &Road = Map[x][y];
-            bool left, right, leftBottom_Colum, RightBottom_Colum, leftTop_Colum, RightTop_Colum;
-            bool Double_left, Double_right;
+            int& Road = Map[x][y];
+            bool left=false, right=false, leftBottom_Colum=false, RightBottom_Colum=false, leftTop_Colum=false, RightTop_Colum=false;
+            bool Double_left=false, Double_right=false;
             if (Road == 2)
-                leftTop_Colum == true;
-            if (x < limit - 1 && Map[x + 1][y])
+                leftTop_Colum = true;
+            if (x < limit && Map[x + 1][y])
                 RightTop_Colum = true;
             if (Map[x][y - 1] % 2 == 0)
                 leftBottom_Colum = true;
-            if (x < limit - 1 && Map[x + 1][y - 1] % 2 == 0)
+            if (x < limit && Map[x + 1][y - 1] % 2 == 0)
                 RightBottom_Colum = true;
             if (Map[x - 1][y] >= 1)
                 left = true;
@@ -94,7 +89,7 @@ void simulation(int limit, vector<int> &command)
                 right = true;
             if (x > 1 && Map[x - 1][y - 1] % 2 == 0)
                 Double_left = true;
-            if (x < limit - 2 && Map[x + 2][y - 1] % 2 == 0)
+            if (x < limit - 1 && Map[x + 2][y - 1] % 2 == 0)
                 Double_right = true;
             //체크
             if (left && !Double_left && !leftBottom_Colum)
@@ -106,13 +101,13 @@ void simulation(int limit, vector<int> &command)
             if (RightTop_Colum && !RightBottom_Colum && !right)
                 return;
 
-            Map[x][y]--;
+            Road-=(command[2]+1);
             //삭제할때 양옆에 뭐가 있는지 확인
         }
     }
     else //설치
     {
-        if (Map[x][y]%2==0)
+        if (Map[x][y] % 2 == 0||Map[x][y]==command[2])
             return; //이미있는경우 return
 
         if (command[2] == 0) //기둥
@@ -122,8 +117,8 @@ void simulation(int limit, vector<int> &command)
                 Map[x][y]++;
             }
             else
-            {                                                                  //바닥설치가 아닌경우
-                if (Map[x][y - 1] %2==0 ||(Map[x][y]==1||(x>0&&Map[x-1][y]>0))) //밑에 무엇이라도 있다면
+            {                                                                                   //바닥설치가 아닌경우
+                if (Map[x][y - 1] % 2 == 0 || (Map[x][y] == 1 || (x > 0 && Map[x - 1][y] > 0))) //밑에 무엇이라도 있다면
                 {
                     Map[x][y]++;
                 }
@@ -131,16 +126,18 @@ void simulation(int limit, vector<int> &command)
         }
         else //보
         {
-            if (y == 0) return;                                                          
+            if (y == 0)
+                return;
             //바닥이라면
             else
             {
-                if (x == 0 || x == limit - 1) return;
-                if(Map[x][y-1]%2==0) Map[x][y]=1; //바닥에 뭐가있다면
-                else if(x<limit-1&&Map[x+1][y-1]%2==0) Map[x][y]=1; //오른쪽바닥에 뭐가있다면
-                else if (x>0&&x<limit-1&&Map[x - 1][y] >= 0 && Map[x + 1][y] >= 0) //양옆에 보가있다면
+                if (Map[x][y - 1] % 2 == 0)
+                    Map[x][y] = 1; //바닥에 뭐가있다면
+                else if (x < limit && Map[x + 1][y - 1] % 2 == 0)
+                    Map[x][y] = 1;                                                       //오른쪽바닥에 뭐가있다면
+                else if (x > 0 && x < limit && Map[x - 1][y] >= 1 && Map[x + 1][y] >= 1) //양옆에 보가있다면
                 {
-                    Map[x][y]=1;
+                    Map[x][y] = 1;
                 }
             }
         }
@@ -159,7 +156,7 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
         for (int j = 0; j <= n; j++)
         {
             vector<int> current(3);
-            if (Map[i][j] == -1)
+            if (Map[i][j] <0)
                 continue;
             current[0] = i;
             current[1] = j;
@@ -180,7 +177,7 @@ vector<vector<int>> solution(int n, vector<vector<int>> build_frame)
     sort(answer.begin(), answer.end(), compare);
     return answer;
 }
-void push_test(vector<vector<int>> &answer,int a, int b, int c, int d)
+void push_test(vector<vector<int>>& answer, int a, int b, int c, int d)
 {
     vector<int> build_frame(4);
     int i = 0;
@@ -193,15 +190,18 @@ void push_test(vector<vector<int>> &answer,int a, int b, int c, int d)
 //command[2]=대상
 int main()
 {
-    memset(Map, -1, sizeof Map);
+    //  memset(Map, -1, sizeof Map);
     vector<vector<int>> build_frame;
-    push_test(build_frame,1, 0, 0, 1);
-    push_test(build_frame,1, 1, 1, 1);
-    push_test(build_frame,2, 1, 0, 1);
-    push_test(build_frame,2, 2, 1, 1);
-    push_test(build_frame,5, 0, 0, 1);
-    push_test(build_frame,5, 1, 0, 1);
-    push_test(build_frame,4, 2, 1, 1);
-    push_test(build_frame,3, 2, 1, 1);
-    solution(5,build_frame);
+    push_test(build_frame, 0, 0, 0, 1);
+    push_test(build_frame, 2, 0, 0, 1);
+    push_test(build_frame, 4, 0, 0, 1);
+    push_test(build_frame, 0, 1, 1, 1);
+    push_test(build_frame, 1, 1, 1, 1);
+    push_test(build_frame, 2, 1, 1, 1);
+    push_test(build_frame, 3, 1, 1, 1);
+    push_test(build_frame, 2, 0, 0, 0);
+    push_test(build_frame, 1, 1, 1, 0);
+    push_test(build_frame, 2, 2, 0, 1);
+    solution(5, build_frame);
+    return 0;
 }
