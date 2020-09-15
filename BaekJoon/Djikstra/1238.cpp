@@ -16,7 +16,7 @@ struct info
     int current, cost;
 };
 struct compare
-{
+{       
     bool operator()(info a, info b)
     {
         return a.cost > b.cost;
