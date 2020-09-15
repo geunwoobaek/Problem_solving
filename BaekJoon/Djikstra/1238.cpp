@@ -5,14 +5,15 @@
 #include <functional>
 
 using namespace std;
-bool visit[1001];
 int N, M, Point; //학생수,길수,도착할마을지점
 int Maximum = 0;
 vector<vector<pair<int, int>>> d(1001);
 vector<vector<pair<int, int>>> d2(1001);
+int prev_cost[1001];
+int answer[1001];
 struct info
 {
-    int start, current, cost;
+    int current, cost;
 };
 struct compare
 {
@@ -24,27 +25,29 @@ struct compare
 
 void djikstra(int start, vector<vector<pair<int, int>>> &Map)
 {
+    for (int i = 1; i <= N; i++)
+		prev_cost[i] = 1e9; //시작지점 부터 해당지점까지의거리 ㅇ
+
     priority_queue<info, vector<info>, compare> queue;
-    for (int i = 0; i < d[start].size(); i++)
-    {
-        queue.push(info{start, Map[start][i].first, Map[start][i].second});
-    }
+    queue.push({start,0});
     while (!queue.empty())
     {
-        info cur = queue.top();
+        info cur = queue.top(); //현재위치
         queue.pop();
-        for (auto curinfo : d[cur.current]) //curinfo first=도착장소 second비용
+        for(int i=0;i<Map[cur.current].size();i++)
         {
-            int &pre_cost = _Map[cur.start][curinfo.first];
-            int cur_cost = cur.cost + curinfo.second;
-            if (pre_cost > cur_cost)
+            int now_cost=Map[cur.current][i].second+cur.cost;//현재지점부터 특정지점까지갔을때 의거리
+            int arrive=Map[cur.current][i].first;
+            if(now_cost<prev_cost[arrive])
             {
-                pre_cost = cur_cost;
-                queue.push({cur.start,
-                            curinfo.first,
-                            cur_cost});
+                prev_cost[arrive]=now_cost;
+                queue.push({arrive,now_cost});
             }
         }
+    }
+    for(int i=1;i<=N;i++)
+    {   
+        answer[i]+=prev_cost[i];
     }
 }
 
@@ -53,25 +56,19 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cin >> N >> M >> Point;
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= N; j++)
-            _Map[i][j] = 2e9;
-    }
     for (int i = 1; i <= M; i++)
     {
         int a, b, c;
         cin >> a >> b >> c;
         d[a].push_back({b, c}); //a에서 b로갈때 드는비용
-        d[b].push_back({a, c}); //a에서 b로갈때 드는비용
-        _Map[a][b] = c;
+        d2[b].push_back({a, c}); //a에서 b로갈때 드는비용
     }
     djikstra(Point, d);
     djikstra(Point, d2);
     for (int i = 1; i <= N; i++)
     {
         if (Point != i)
-            Maximum = max(Maximum, _Map[Point][i] + _Map[i][Point]);
+            Maximum = max(Maximum,answer[i]);
     }
     cout << Maximum;
     return 0;
