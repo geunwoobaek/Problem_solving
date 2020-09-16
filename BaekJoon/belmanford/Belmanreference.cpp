@@ -4,8 +4,8 @@
 #include <limits.h>
  
 // 간선 구조체
-// src = 시작점, dest = 도착점, weight = 가중치
-struct Edge
+    // src = 시작점, dest = 도착점, weight = 가중치
+    struct Edge
 {
     int src, dest, weight;
 };
