@@ -23,7 +23,6 @@ int solution(vector<int> &A)
             Maximum = A[i];
             count++;
         }
-        else if (A)
     }
     return count;
 }
