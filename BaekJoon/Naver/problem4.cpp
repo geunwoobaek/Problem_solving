@@ -7,24 +7,23 @@ int solution(vector<int> &A)
 {
     int count = 1;
     int Maximum = 0;
-    int prevMaximum=0;
+    int prevMaximum = 0;
     int singlecount = 0;
     bool check = true;
-    bool check = A[0] <= A[1]; //감소하고있는가?
     for (int i = 0; i < A.size(); i++)
     {
         singlecount++;
-        if (singlecount < 3 && A[i] < Maximum)
+        if (singlecount < 3 && A[i] < prevMaximum)
         {
             break;
             check = false;
         }
         if (singlecount <= 3 && Maximum < A[i])
-        {   prevMaximum=Maximum;
-            Maximum=A[i];
+        {
+            Maximum = A[i];
             count++;
         }
-        else if(A)
+        else if (A)
     }
     return count;
 }
