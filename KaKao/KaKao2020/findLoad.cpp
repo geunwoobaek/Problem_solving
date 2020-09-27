@@ -9,7 +9,10 @@ using namespace std;
     {                                  \
         nodeinfo[i][0], nodeinfo[i][1] \
     }
-#define newnode(i) {M[pair_now(i)], pair_now(i)} 
+#define newnode(i)                  \
+    {                               \
+        M[pair_now(i)], pair_now(i) \
+    }
 map<Pair, int> M;
 bool compare(vector<int> a, vector<int> b)
 {
@@ -23,50 +26,55 @@ class node
 public:
     int data;
     Pair pos;
-    node* left = NULL;
-    node* right = NULL;
+    node *left = NULL;
+    node *right = NULL;
     node(int data, Pair pos)
     {
         this->data = data;
         this->pos = pos;
     }
-    void push_data(int data,Pair pos_)
+    void push_data(int data, Pair pos_)
     {
         if (pos.first > pos_.first)
         {
             if (left == NULL)
             {
-                left = new node(data,pos_);
+                left = new node(data, pos_);
             }
-            else {
+            else
+            {
                 left->push_data(data, pos_);
             }
         }
-        else {
+        else
+        {
             if (right == NULL)
             {
                 right = new node(data, pos_);
             }
-            else {
+            else
+            {
                 right->push_data(data, pos_);
             }
         }
     }
 };
-void preorder(node& parent, vector<int>& answer)
+void preorder(node &parent, vector<int> &answer)
 {
     answer.push_back(parent.data);
     if (parent.left != NULL)
-         preorder(*parent.left, answer);
+        preorder(*parent.left, answer);
     if (parent.right != NULL)
-          preorder(*parent.right, answer);
+        preorder(*parent.right, answer);
 }
-void postorder(node& parent, vector<int>& answer)
+void postorder(node &parent, vector<int> &answer)
 {
-    node* left_node = parent.left;
-      if (left_node != NULL) postorder(*left_node, answer);
-    node* right_node = parent.right;
-    if (right_node != NULL) postorder(*right_node, answer);
+    node *left_node = parent.left;
+    if (left_node != NULL)
+        postorder(*left_node, answer);
+    node *right_node = parent.right;
+    if (right_node != NULL)
+        postorder(*right_node, answer);
     answer.push_back(parent.data);
 }
 vector<vector<int>> solution(vector<vector<int>> nodeinfo)
@@ -82,7 +90,7 @@ vector<vector<int>> solution(vector<vector<int>> nodeinfo)
     Grade.push_back(vector<Pair>(1, pair_now(0)));
     vector<node> vec;
     NodeSet.push_back(vector<node>(1, newnode(0)));
-    Pair cur_Range = { 1, 1 };
+    Pair cur_Range = {1, 1};
     for (int i = 1, j = 0; i < nodeinfo.size(); i++)
     {
         P->push_data(M[pair_now(i)], pair_now(i));
@@ -98,9 +106,9 @@ vector<vector<int>> solution(vector<vector<int>> nodeinfo)
     }
     for (int i = 0; i < NodeSet.size() - 1; i++)
     {
-        vector<node>& Parent = NodeSet[i];
-        vector<node>& Child = NodeSet[i + 1];
-        for (int p = 0, c = 0; p < Parent.size() && c < Child.size();c++)
+        vector<node> &Parent = NodeSet[i];
+        vector<node> &Child = NodeSet[i + 1];
+        for (int p = 0, c = 0; p < Parent.size() && c < Child.size(); c++)
         {
             int Parent_x = Parent[p].pos.first;
             int Child_x = Child[c].pos.first;
@@ -108,7 +116,8 @@ vector<vector<int>> solution(vector<vector<int>> nodeinfo)
             {
                 Parent[p].left = &Child[c];
             }
-            else {
+            else
+            {
                 Parent[p].right = &(Child[c]);
                 p++;
             }
