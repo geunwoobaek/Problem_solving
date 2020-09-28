@@ -29,6 +29,10 @@ int main()
     string test = " kdcd__sdab__fcdsabef_fesa";
     string pattern = "_";
     vector<string> vec = spilt(test, pattern);
+    for(auto i:vec)
+    {
+        cout<<i<<endl;
+    }
     return 0;
 }
 
