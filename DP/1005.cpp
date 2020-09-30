@@ -5,29 +5,48 @@
 // 마지막 줄에는 백준이가 승리하기 위해 건설해야 할 건물의 번호 W가 주어진다.
 #include <iostream>
 #include <queue>
-#include<cstring>
+#include <cstring>
 #include <vector>
 using namespace std;
-bool check[1001];
+int max(int a, int b) { return a > b ? a : b; }
+int cache[1001];
+#define Pair pair<int, int> //first=건물번호 완성시간
 #define f(i, j, k) for (int i = j; i < k; i++)
-int T, N, K, X, Y, W, D;
-
-
-void main()
+int T, N, K, G;
+int dfs(vector<int> &cost, vector<vector<int>> &Rules, int G)
 {
+    int &result = cache[G];
+    if (result != -1)
+        return result;
+    result = 0;
+    for (int i : Rules[G])
+    {
+        result = max(result, dfs(cost, Rules, i));
+    }
+    return result = result + cost[G];
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> T;
     while (T-- > 0)
     {
         cin >> N >> K;
-        memset(check,false,sizeof check);
+        int now_time = 0;
+        memset(cache, -1, sizeof cache);
         vector<int> cost(N + 1);
-        vector<vector<int>> Rules(K + 1); //
+        vector<vector<int>> Rules(N + 1); //a를먼저 지어야지만 지을수 있는 빌딩들
         f(i, 1, N + 1) cin >> cost[i];
         f(i, 0, K)
         {
             int a, b;
             cin >> a >> b;
-            Rules[a].push_back(b);
+            Rules[b].push_back(a);
         }
+        cin >> G;
+        cout << dfs(cost, Rules, G) << endl;
     }
+    return 0;
 }
