@@ -12,17 +12,39 @@
 
 // 둘째 줄에는 정답이 될 수 있는 가장 긴 증가하는 부분 수열을 출력한다.
 #include <iostream>
-#include <queue>
-#include <cstring>
 #include <vector>
 using namespace std;
 int N;
-vector<int> vec;
-int main()  
+vector<int> vec(1);
+void lower_bound(vector<int>& vec, int value)
 {
-cin>>N;
-vec.resize(N);
-for(int i=0;i<N;i++) cin>>vec[i];
-
-return 0;
+    int left = 0;
+    int mid = 0;
+    int right = vec.size() - 1;
+    while (right > left) 
+    {
+        mid = (right + left) / 2;
+        if (vec[mid] >= value) 
+            right = mid;
+        else left = mid + 1; 
+    }
+    if (left < 0) left = 0;
+    vec[left] = value;
+}
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> N>> vec[0];
+    for (int i = 1;i < N;i++)
+    {
+        int cur;
+        cin >> cur;
+        if (cur > vec.back()) vec.push_back(cur);
+        else lower_bound(vec, cur);
+    }
+    cout<<vec.size()<<endl;
+    for (int i : vec) cout<<i<<" ";
+    return 0;
 }
