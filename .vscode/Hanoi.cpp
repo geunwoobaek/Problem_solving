@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include<math.h>
 using namespace std;
 #define f(i,j,k) for(int i=j;i<=k;i++)
 int N, G;
