@@ -3,7 +3,7 @@
 using namespace std;
 int N,K,C;
 vector<int> wood;
-int LL;
+int LL,pos;
 void input(); void solve(); void find();
 void input()
 {
@@ -12,7 +12,7 @@ cin.tie(NULL);
 cin>>N>>K>>C; wood.resize(K+1);
 for(int i=1;i<=K;i++) cin>>wood[i];
 }
-void lower_bound()
+void findLarge()
 {
     int left=0;
     int Right=1e9;
@@ -39,10 +39,19 @@ bool findLen(int mid)
     if(cnt<0) return false;
     return true; 
 }
+void findPos(){
+    K--;
+    int cur=0;
+    for(int i=1;i<wood.size()>=0;i++)
+    {   
+        
+    }
+}
 void solve()
 {
     input();
-    find();
+    findLarge();
+    findPos();
 }
 int main()
 {
