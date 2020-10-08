@@ -1,45 +1,51 @@
-#include <iostream>
-#include <algorithm>
-
+#include<iostream>
+#include<vector>
 using namespace std;
-
-int L, K, C, loc[10002];
-bool isPossible(int s, int c, int l) { //s는 시작점 //c는 자를수 있는개수 ㅣ는 길이
-    int rc = c;//갯수
-    int cl = 0;
-    for (int i = s; i <= K + 1; ++i) {
-        if (loc[i] - loc[i - 1] > l) //전체길이 절반 1 4 8 10 이럴경우
-            return false;
-        if (cl + loc[i] - loc[i - 1] <= l) //cl 는 현재지점
-            cl += loc[i] - loc[i - 1];
-        else
-            cl = loc[i] - loc[i - 1], --rc;
-    }
-    return rc >= 0;
+int N,K,C;
+vector<int> wood;
+int LL;
+void input(); void solve(); void find();
+void input()
+{
+ios_base::sync_with_stdio(false);
+cin.tie(NULL);
+cin>>N>>K>>C; wood.resize(K+1);
+for(int i=1;i<=K;i++) cin>>wood[i];
 }
-
-int main() {
-    cin>>L>>K>>C;
-    loc[0] = 0;
-    for (int i = 1; i <= K; ++i)
-        cin>>loc[i];
-    loc[K + 1] = L;
-    sort(loc, loc + K + 2);
-
-    int ll = 1, lm, lr = L;
-    while (ll < lr) { //나눌위치 return 1 8 9 10 8보다 더크게나눌수이쓴거 없음 즉 ll=6 
-        lm = (ll + lr) >> 1;
-        if (isPossible(1, C, lm)) lr = lm;
-        else ll = lm + 1;
+void lower_bound()
+{
+    int left=0;
+    int Right=1e9;
+    while(left<Right)
+    {
+        int mid=(left+Right)/2;
+        if(findLen(mid)) Right=mid;
+        else left=mid+1;
     }
-
-    int fl = 1, fm, fr = K;
-    while (fl < fr) {
-        fm = (fl + fr) >> 1;
-        if (isPossible(fm + 1, C - 1, ll)) fr = fm;
-        else fl = fm + 1;
+    LL=left;
+}
+bool findLen(int mid)
+{ 
+    int cnt=K;
+    int cur=0;
+    for(int i=1;i<wood.size()&&cnt>=0;i++)
+    {   
+        int now=wood[i]-wood[i-1];     
+        if(now>mid) return false;
+        cur+=now;
+        if(cur>mid) cnt--;
+        cur=now;
     }
-
-    printf("%d %d\n", ll, loc[fl]);
+    if(cnt<0) return false;
+    return true; 
+}
+void solve()
+{
+    input();
+    find();
+}
+int main()
+{
+    solve();
     return 0;
 }
