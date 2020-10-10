@@ -55,15 +55,15 @@ int main()
     // date.push_back(31);
     // date.push_back(3540);
     // add(1,date);
-    priority_queue<Pair,vector<Pair>,compare> que;
+    // priority_queue<Pair,vector<Pair>,compare> que;
 
-    while(!customer.empty())
-    {   int cur=
-        while(que.size()!=FULL)
-        {
-            집어넣기
-        }
+    // while(!customer.empty())
+    // {   int cur=
+    //     while(que.size()!=FULL)
+    //     {
+    //         집어넣기
+    //     }
 
-    }
+    // }
     cout << "";
 }
