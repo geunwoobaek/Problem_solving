@@ -10,7 +10,7 @@ vector<string> spilt(const string& str,const string& pattern) //직접spilt구�
     int _size = pattern.length();
     for (int i = 0;i < str.length();i++)
     {
-        if (str[i]== _last&&i>=0&&str.substr(i-(_size-1), _size)==pattern)//pattern
+        if (str[i]== _last&&str.substr(i-(_size-1), _size)==pattern)//pattern
         {
           int size = i - (_size - 1) - _start;
           if(size>0)
@@ -26,8 +26,8 @@ vector<string> spilt(const string& str,const string& pattern) //직접spilt구�
 
 int main()
 {
-    string test = " kdcd__sdab__fcdsabef_fesa";
-    string pattern = "_";
+    string test = " kdcd__s dab__fc dsa.bef fesa";
+    string pattern = " ";
     vector<string> vec = spilt(test, pattern);
     for(auto i:vec)
     {

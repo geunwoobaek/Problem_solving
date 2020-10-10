@@ -5,6 +5,7 @@
 #include <map>
 using namespace std;
 unordered_map<int, pair<int, int>> M;
+vector<vect
 typedef vector<int>::iterator it;
 bool check[2001];
 int N, cnt;
