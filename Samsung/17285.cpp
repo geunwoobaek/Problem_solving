@@ -1,20 +1,25 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+//define
 #define Pair pair<int, int>
 #define x first
 #define y second
+//visitcheck
 bool visit[4][30];
 bool visit2[50];
 bool isForty = false;
+//말,주사위,지도
 vector<Pair> horse(4, {0, 0});
 vector<int> dice(10);
-int max(int a, int b) { return a > b ? a : b; }
 int map[4][30];
+//답
 int _Max = 0;
+//함수
 void setting();
 void input();
 void solve();
+int max(int a, int b) { return a > b ? a : b; }
 void dfs(int res, int cur);
 int main()
 {
@@ -35,44 +40,43 @@ void dfs(int res, int cur)
     {
         Pair &one = horse[i];
         Pair copy = one;
-        if (one.first == 3 && one.second == 29)
-            continue; //마지막지점에 도달함
-        if (one.first == 0&& one.second > 0&& (one.second % 5 == 0))
+        if (one.x == 3 && one.y == 29) continue; //마지막지점에 도달함
+        if (one.x == 0&& one.y > 0&& (one.y % 5 == 0)) //Blue에 도달함!
         {
-            if (one.second == 5)
-                one.first = 1;
-            if (one.second == 10)
-                one.first = 2;
-            if (one.second == 15)
-                one.first = 3;
+            if (one.y == 5)
+                one.x = 1;
+            if (one.y == 10)
+                one.x = 2;
+            if (one.y == 15)
+                one.x = 3;
         }
-        one.second += dice[cur];
+        one.y += dice[cur]; //다음지점으로 이동
         //map[1][13],map[3][23],map[2][17]=끝
-        if ((one.first==0&&one.second>20)||(one.first == 1 && (one.second > 12)) || (one.first == 2 && one.second > 16) || (one.first == 3 && one.second > 22))
+        if ((one.x==0&&one.y>20)||(one.x == 1 && (one.y > 12)) || (one.x == 2 && one.y > 16) || (one.x == 3 && one.y > 22))
         {
-            one.first = 3;
-            one.second = 29;
+            one.x = 3;
+            one.y = 29;
         }
-        int cur_value = map[one.first][one.second];
-        int prev_value = map[copy.first][copy.second];
-        if (one.second == 29 ||(!visit[one.first][one.second] && ((!isForty) || cur_value != 40) && (one.first == 0 || !visit2[one.second])))
+        int cur_value = map[one.x][one.y];
+        int prev_value = map[copy.x][copy.y];
+        if (one.y == 29 ||(!visit[one.x][one.y] && ((!isForty) || cur_value != 40) && (one.x == 0 || !visit2[one.y])))
         {
-            if (cur_value == 40)
+            if (cur_value == 40) 
                 isForty = true;
-            if (one.first > 0)
+            if (one.x > 0)
                 visit2[cur_value] = true;
-            if (copy.first > 0)
+            if (copy.x > 0)
                 visit2[prev_value] = false;
-            visit[copy.first][copy.second] = false;
-            visit[one.first][one.second] = true;
+            visit[copy.x][copy.y] = false; //이전에방문했던거 false
+            visit[one.x][one.y] = true; //현재방문한점 true
             dfs(res + cur_value, cur + 1);
-            visit[one.first][one.second] = false;
-            visit[copy.first][copy.second] = true;
-            if (cur_value == 40)
+            visit[one.x][one.y] = false; //현재 방문했던점 false
+            visit[copy.x][copy.y] = true; //이전에 방문했던점 true
+            if (cur_value == 40) //현재 value=40
                 isForty = false;
-           if (one.first > 0)
-                visit2[cur_value] = false;
-            if (copy.first > 0)
+           if (one.x > 0) //blueRoad로 걷고있을때
+                visit2[cur_value] = false; //cur_value=false;
+            if (copy.x > 0) 
                 visit2[prev_value] = true;
         }
         one = copy;
