@@ -2,19 +2,20 @@
 #include <vector>
 using namespace std;
 //define type
-#define Pair pair<int, int>
-#define y first
+#define Pair pair<pair<int,int>, int>
+#define y first.first
 #define x second
+#define z first.second
 vector<vector<int>> command; //명령
-bool blue_board[6][4], green_board[6][4];
+int blue_board[6][4], green_board[6][4];
 int N, score = 0, total = 0; //score
 //함수파트
 Pair next_[2] = { {1, 0}, {0, 1} };
 void input();
 void move(vector<int>& cur);
 void simulation();
-void move(int pos, vector<Pair> bar, bool board[][4]);
-void remove(int where, Pair& RemovePoint, bool board[][4]); //해당지점부터 해당지점까지 Scan해서삭제
+void move(int pos, vector<Pair> bar, int board[][4]);
+void remove(int where, Pair& RemovePoint, int board[][4]); //해당지점부터 해당지점까지 Scan해서삭제
 void solve();
 
 int main()
@@ -37,9 +38,9 @@ void simulation()
     {
         for (int j = 0; j < 4; j++)
         {
-            if (blue_board[i][j])
+            if (blue_board[i][j]!=0)
                 total++;
-            if (green_board[i][j])
+            if (green_board[i][j]!=0)
                 total++;
         }
     }
@@ -77,7 +78,7 @@ void move(vector<int>& cur) //모드,행,열
     }
     move(cur[1], bar, blue_board); //열정보만 넣음
 }
-void move(int pos, vector<Pair> bar, bool board[][4])
+void move(int pos, vector<Pair> bar, int board[][4], vector<vector<Pair>>& two)
 {
     //막대 채워넣는부분..
     bool CanGo = true;
@@ -86,12 +87,12 @@ void move(int pos, vector<Pair> bar, bool board[][4])
         CanGo = bar.back().y != 6; //끝지점에 도달하는지 안하는지 체크
         //확인하는부분
         for (int i = 0; i < bar.size() && CanGo; i++)
-            CanGo = !board[bar[i].y][bar[i].x + pos];
+            CanGo = board[bar[i].y][bar[i].x + pos]==0;
         //안될경우..채워넣는 부분
         for (int i = 0; i < bar.size() && !CanGo; i++)
         {
             bar[i].y--;
-            board[bar[i].y][bar[i].x + pos] = true;
+            board[bar[i].y][bar[i].x + pos] = 1;
         }
         //증가부분
         for (int i = 0; i < bar.size() && CanGo; i++)
@@ -108,13 +109,20 @@ void move(int pos, vector<Pair> bar, bool board[][4])
         vector<Pair> GoDown(4);
         for (int i = 0; i < 4; i++)
         {
-            for (int j = RemovePoint.y+1; j < 6 && !board[j][i]; j++) //밑에부분
+            for (int j = RemovePoint.y+1; j < 6 && board[j][i]==0; j++) //밑에부분
             {
                 GoDown[i].x++; //지점부터 끝까지
             }
             int j = 0;
-            for (j = RemovePoint.y; j >=0 && !board[j][i]; j--)
+            for (j = RemovePoint.y; j >=0 && board[j][i]==0; j--) //위에부분
             {
+                if (board[j][i] == 2)
+                {
+                    if (i < 4 && board[j][i + 1] == 2)
+                    {
+
+                    }
+                }
                 GoDown[i].y++; //지점부터 처음까지
             }
         }
@@ -124,7 +132,7 @@ void move(int pos, vector<Pair> bar, bool board[][4])
                 {
                     int now = GoDown[j].y + GoDown[j].x;
                     green_board[i + now][j] = green_board[i][j];
-                    green_board[i][j] = false;
+                    green_board[i][j] = 0;
                 }
             }
 
@@ -133,7 +141,7 @@ void move(int pos, vector<Pair> bar, bool board[][4])
     int howManyPush = 0;
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 4; j++)
-            if (board[i][j])
+            if (board[i][j]!=0)
             {
                 howManyPush++;
                 break;
@@ -143,19 +151,19 @@ void move(int pos, vector<Pair> bar, bool board[][4])
         for (int j = 0; j < 4; j++)
         {
             board[i][j] = board[i - howManyPush][j];
-            board[i - howManyPush][j] = false;
+            board[i - howManyPush][j] = 0;
         }
     }
 }
 //삭제부분
-void remove(int where, Pair& RemovePoint, bool board[][4])
+void remove(int where, Pair& RemovePoint, int board[][4], vector<vector<Pair>>& two)
 {
     for (int i = where; i < 6; i++)
     {
         bool CanRemove = true;
         for (int j = 0; j < 4 && CanRemove; j++)
         {
-            CanRemove = board[i][j];
+            CanRemove = board[i][j]!=0;
         }
         if (CanRemove) //삭제가능할시.. 삭제
         {
@@ -164,7 +172,7 @@ void remove(int where, Pair& RemovePoint, bool board[][4])
             RemovePoint.x++;
             for (int j = 0; j < 4; j++)
             {
-                board[i][j] = false;
+                board[i][j] = 0;
             }
         }
     }
