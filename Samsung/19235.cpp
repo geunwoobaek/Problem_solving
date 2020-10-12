@@ -67,7 +67,7 @@ void move(vector<int>& cur) //모드,행,열
     else if (cur[0] == 3)
         bar.push_back({ 1, 0 });
     //green에 넣을거
-    move(cur[2], bar, green_board); //열정보만 넣음
+        move(cur[2], bar, green_board); //열정보만 넣음
     //blue에 넣을거
     for (int i = 0; i < bar.size(); i++)
     {
@@ -101,26 +101,34 @@ void move(int pos, vector<Pair> bar, bool board[][4])
     Pair RemovePoint = { 0, 0 }; //삭제지점:Clear되는시점
     //삭제부분
     while (true)
-    {   
+    {
         remove(RemovePoint.y, RemovePoint, board);
         if (--RemovePoint.x < 0)
             break;
-        vector<int> goBlock(4, 1 + RemovePoint.x);
-        for (int i = 0; i < 4 && RemovePoint.y < 5; i++)
+        vector<Pair> GoDown(4);
+        for (int i = 0; i < 4; i++)
         {
-            bool up = board[RemovePoint.y - 1 - RemovePoint.x][i];
-            bool down = board[RemovePoint.y + 1][i];
-            if (!down)
-                goBlock[i]++;
-        }
-        for (int i = RemovePoint.y - 1-RemovePoint.x; i >= 0; i--) //삭제한부분부터 그윗부분들 밑으로 내리기..
-        {
-            for (int j = 0; j < 4; j++)
+            for (int j = RemovePoint.y+1; j < 6 && !board[j][i]; j++) //밑에부분
             {
-                board[i + goBlock[j]][j] = board[i][j];
+                GoDown[i].x++; //지점부터 끝까지
+            }
+            int j = 0;
+            for (j = RemovePoint.y; j >=0 && !board[j][i]; j--)
+            {
+                GoDown[i].y++; //지점부터 처음까지
             }
         }
-    }
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = RemovePoint.y-GoDown[j].y;i >= 0;i--) //지점위부터
+                {
+                    int now = GoDown[j].y + GoDown[j].x;
+                    green_board[i + now][j] = green_board[i][j];
+                    green_board[i][j] = false;
+                }
+            }
+
+        }
     //밀어넣는부분
     int howManyPush = 0;
     for (int i = 0; i < 2; i++)
