@@ -4,6 +4,7 @@ using namespace std;
 int DP[100001];
 int N;
 int Max=-1000;
+
 int main()
 {
     ios_base::sync_with_stdio(false);
