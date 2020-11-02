@@ -31,7 +31,7 @@ int dp(int cur, int from, int state)
         int k = 0;
         for (int i = 0; i < Graph[cur].size(); i++)
         {
-            if (Graph[cur][i] == from) continue; //이떄 왔던 노드일경우 스킵
+            if (Graph[cur][i] == from) continue; //이때 왔던 노드일경우 스킵
             k += dp(Graph[cur][i], cur, 1); //다음노드들은 자기자신을 칠해야한다.
         }
         result = min(k, result); //자기자신 칠한경우+자기자신안칠한경우
