@@ -42,7 +42,7 @@ int main() {
 			end = mid ;
 			answer = mid;
 			answer1 = abs(all - answer2);
-			if (start == end)break;
+			if (start == end) break;
 		}
 	}
 	cout << answer << " " << answer1;
