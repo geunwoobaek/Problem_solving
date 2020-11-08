@@ -31,7 +31,7 @@ void dfs(int res, int cur)
     if (cur == 10)
     {
         _Max = max(res, _Max);
-        return;
+         return;
     }
     for (auto &now : horse)
     {
@@ -72,8 +72,7 @@ void input()
 
 void setting()
 {
-    for (int i = 1; i <= 20; i++)
-        map[0][i] = 2 * i;
+    for (int i = 1; i <= 20; i++) map[0][i] = 2 * i;
     map[1][5]= 10;
     map[1][6] = 13;
     map[1][7] = 16;
