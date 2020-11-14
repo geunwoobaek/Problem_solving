@@ -6,7 +6,7 @@ string T, P;
 //N에서 자기 자신을 찾으면서 나타나는 부분 일치를 이용해 pi[] 계산
 //pi[i] = N[..i]의 접미사도 되고 접두사도 되는 문자열의 최대 길이
 vector<int> getPartialMatch(const string& N)
-{
+{   string a="asc-a";
     int M = N.size();
     vector<int> pi(M, 0);
     int begin = 1, matched = 0;

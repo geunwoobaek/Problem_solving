@@ -26,8 +26,8 @@ vector<string> spilt(const string& str,const string& pattern) //직접spilt구�
 
 int main()
 {
-    string test = " kdcd__s dab__fc dsa.bef fesa";
-    string pattern = " ";
+    string test = " kdcd__,s dab__fc,dsa.bef,fesa";
+    string pattern = ",";
     vector<string> vec = spilt(test, pattern);
     for(auto i:vec)
     {
