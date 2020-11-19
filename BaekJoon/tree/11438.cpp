@@ -1,90 +1,67 @@
-#include <iostream>
-#include <vector>
-#include<queue>
+#include <bits/stdc++.h>
+
 using namespace std;
-int N, M;
-int Parent[100001][21];
-vector<int> Depth(100001, 100001);
-vector<vector<int>> adj(100001);
-#define f(i, j, N) for (int i = j; i <= N; i++)
-void getTreedfs(int parent, int cur)
-{
-    Parent[cur][0] = parent;
-    Depth[cur] = Depth[parent] + 1;
-    for (auto child : adj[cur])
-    {
-        if (child != parent)
-        {
-            getTreedfs(cur, child);
+
+int n,m;
+vector<int> adj[100005];
+int depth[100005];
+int parent[100005][18];
+
+void dfs(int idx){
+    for(auto& i : adj[idx]){
+        if(depth[i]==-1){
+            depth[i] = depth[idx] + 1;
+            parent[i][0] = idx;
+            dfs(i);
         }
     }
 }
-int findSameParent(int a, int b)
-{
-    //depth가 같을때까지 계속 findSameParent진행
-    //depth가 같아지면 같은 공통조상나올때까지 재귀진행
-    if (a == b)
-        return a;
-    else if (Depth[a] == Depth[b]) findSameParent(Parent[a][0], Parent[b][0]);
-    else { //depth가 다를때
-           //depth큰쪽을 depth가 적은쪽이랑 같아지도록 맞춤
-           //예를들어 2,7 7->6>5->3,가게하기
-        int aParentNum = 0, bParentNum=0;
-        int aValue = a, bValue = b;
-        while (Depth[aValue] > Depth[bValue])
-        {
-            if (Depth[Parent[a][aParentNum]] > Depth[b]) {
-                aValue = Parent[a][aParentNum];
-                aParentNum++;
-            }
-            else {
-                a = aValue;
-                aValue = Parent[a][aParentNum=0];
+inline void LCA(int& a, int& b){
+    if(a!=b){
+        for(int i=17;i>=0;i--){
+            if(parent[a][i]!=parent[b][i]){
+                a = parent[a][i];
+                b = parent[b][i];
             }
         }
-        while (Depth[aValue] < Depth[bValue])
-        {
-            if (Depth[Parent[b][bParentNum]] > Depth[a]) {
-                bValue = Parent[b][bParentNum];
-                bParentNum++;
-            }
-            else {
-                b = bValue;
-                bValue = Parent[b][bParentNum = 0];
-            }
-        }
-        return findSameParent(aValue, bValue);
+        a = parent[a][0];
     }
+    cout << a+1 << '\n';
 }
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    cin >> N;
-    Depth[1] = -1;
-    f(i, 1, N - 1)
-    {
-        int from, to, p, c;
-        cin >> from >> to;
-        adj[from].push_back(to);
-        adj[to].push_back(from);
+int main(void){
+    ios::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    cin >> n;
+    for(int i=0;i<n-1;i++){
+        int u,v;
+        cin >> u >> v;
+        u--, v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    getTreedfs(1, 1);
-    f(i, 1, N)
-    {
-        f(j, 0, 19)
-        {
-            if (Parent[i][j] <= 1) break;
-            Parent[i][j + 1] = Parent[Parent[i][j]][j];//아는것을 이용해서 topDown방식으로
+    memset(depth,-1,sizeof(depth));
+    memset(parent,-1,sizeof(parent));
+    depth[0] = 0;
+    dfs(0);
+    for(int k=0;k<17;k++){
+        for(int i=0;i<n;i++){
+            if(parent[i][k]==-1) continue;
+            parent[i][k+1] = parent[parent[i][k]][k];
         }
     }
-    cin >> M;
-    f(i, 1, M)
-    {
-        int a, b;
-        cin >> a >> b;
-        cout << findSameParent(a, b) << "\n";
+    cin >> m;
+    for(int i=0;i<m;i++){
+        int u,v;
+        cin >> u >> v;
+        u--,v--;
+        if(depth[u]<depth[v]) swap(u,v);
+        int diff = depth[u]-depth[v];
+        for(int i=0;diff!=0;i++){
+            if(diff%2==1) u = parent[u][i];
+            diff/=2;
+        }
+        LCA(u,v);
     }
     return 0;
 }
