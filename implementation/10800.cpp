@@ -3,7 +3,7 @@
 #include <string>
 #include <algorithm>
 using namespace std;
-#define Max 200000
+#define Max 200001
 struct ball
 {
     int color, size;
@@ -34,17 +34,17 @@ int main()
         SizeNumber[s]++;
     }
     for (int i = 1; i <= 2000; i++)
-        SizeSegment[i] = (i - 1) * SizeNumber[i - 1] + SizeSegment[i - 1]; //SizeSegment
+        SizeSegment[i] = (i - 1) * SizeNumber[i - 1] + SizeSegment[i - 1]; //사이즈 누적합
 
-    sort(ColorSeqeunce.begin(), ColorSeqeunce.end(), compare);
+    sort(ColorSeqeunce.begin(), ColorSeqeunce.end(), compare); //색깔별,색깔이 같을경우 크기별 정렬
 
     Colorballs[ColorSeqeunce[0].color].push_back({ ColorSeqeunce[0].size,0});
     for (int i = 1;i < ColorSeqeunce.size();i++) //ColorSequence반복
     {
         auto& cur = ColorSeqeunce[i];
         auto& prev = ColorSeqeunce[i-1];
-        auto& Colorball = Colorballs[cur.color];
-        if(prev.color==cur.color)
+        auto& Colorball = Colorballs[cur.color]; 
+        if(prev.color==cur.color) //Color에대한 누적합 구하는과정
             Colorball.push_back({ cur.size,Colorballs[cur.color].back().sum + prev.size});
         else 
             Colorball.push_back({cur.size,0});
@@ -52,7 +52,7 @@ int main()
     for (int i = 0; i < N; i++)
     {
         auto& now = balls[i];
-        cout << SizeSegment[now.size] - lower_bound(Colorballs[now.color], now.size) << "\n";
+        cout << SizeSegment[now.size] - lower_bound(Colorballs[now.color], now.size) << "\n"; //size에 대한 누적합에서 색깔+사이즈에 대한 누적합 빼기
     }
     return 0;
 }
