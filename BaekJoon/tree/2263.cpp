@@ -2,54 +2,46 @@
 using namespace std;
 #define MaxSize 100001
 #define f(i, j, k) for (int i = j; i <= k; i++)
+#define range pair<int, int>
+#define start first
+#define end second
 int N;
 int In_Order[MaxSize];
 int Post_Order[MaxSize];
-class node
-{
-public:
-    int number;
-    node *left;
-    node *right;
 
-    node(int number)
-    {
-        this->number = number;
-        left = NULL;
-        right = NULL;
-    }
-    int get() { return number; }
-};
-class Tree
+int number(range A) { return A.end - A.start+1; }
+//현재까지 탐색한 InOrder의 범위를 가지고있어야함
+//현재까지 탐색한 PostOrder의 범위도 가지고 있어야함.
+
+//in_range,post_range 두개변수
+//1.먼저 post_range안의 맨마지막 수A를 찾음 출력
+//2.inOrder안에 A의 순서를 찾음
+//3.in_range안의 A의 왼쪽과 오른쪽의 갯수를 찾음
+//4.오른쪽갯수가 존재할경우 해당범위 재지정및 1~4,(오른쪽갯수+1)왼쪽출력(1~4)
+void FindChildNode(range in_range, range post_range)
 {
-    public:
-    node *root;
-    Tree(int num){
-        root=new node(num);
-    }
-    void PreOrderSearch(const node *now)
+    int left_num=0, right_num=0;
+    range in_left, in_right, post_left, post_right;
+    in_left = in_right = in_range;
+    int mid = Post_Order[post_range.end];
+    cout << mid << " ";
+    in_left.end = In_Order[mid] - 1;
+    in_right.start = In_Order[mid] + 1;
+    left_num = number(in_left);
+    right_num = number(in_right);
+    if (right_num >0)
     {
-        if (root->get() == NULL)
-            return;
-        cout << root->get() << " ";
-        PreOrderSearch(root->left);
-        PreOrderSearch(root->right);
+        post_right.end -= 1, post_right.start = post_range.end - right_num;
+        FindChildNode(in_right,post_right);
     }
-    node* getRoot(){
-        return root;
+    if (left_num >0)
+    {
+        post_left.end = post_range.end-1-right_num, post_left.start =  post_left.end+1-left_num;
+        FindChildNode(in_left,post_left);
     }
-};
-void FindChildNode(int left,int right,node *Parent) 
-{
-    int OrderNumber=In_Order[Parent->get()];
-    //이때 In_Order기준으로
-    int right_number=right-OrderNumber;
-    int left_number=OrderNumber-left;
-    if(right_number>0) FindChildNode(OrderNumber+1,right-1,Parent->right=new node(Post_Order[right-1]));
-    if(left_number>0) FindChildNode(left,OrderNumber-1,Parent->left=new node(Post_Order[right_number-1]));
 }
 int main(void)
-{   /*
+{ /*
     10
     2 4 3 1 6 9 8 5 7 10
     4 3 2 9 8 6 10 7 5 1
@@ -59,13 +51,13 @@ int main(void)
     cin.tie(0);
     cout.tie(0);
     cin >> N;
-    f(i, 1, N) {
+    f(i, 1, N)
+    {
         int k;
-        cin >>k; In_Order[k]=i;
+        cin >> k;
+        In_Order[k] = i; //위치를담고있다.
     }
     f(i, 1, N) cin >> Post_Order[i];
-    Tree *tree=new Tree(Post_Order[N]);
-    FindChildNode(1,N,tree->getRoot());
-    cout<<"";
+    FindChildNode({1,N},{1,N});
     return 0;
 }
