@@ -40,7 +40,7 @@ vector<int> getPartialMatchMySelf(const string& N)
     {
         while (prefix>=0&&(N[prefix] != N[suffix]))
            prefix--;
-        pi[suffix] = prefix + 1;
+        pi[ ] = prefix + 1;
         suffix++;
         prefix++;
     }
