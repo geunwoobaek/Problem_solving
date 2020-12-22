@@ -1,94 +1,46 @@
-#include<iostream>
- 
-#define endl "\n"
-#define MAX 2001
+#include <bits/stdc++.h>
 using namespace std;
- 
-int N;
-int MAP[MAX][MAX];
-bool Visit[MAX][MAX];
- 
-int dx[] = { 0, 0, 1, -1 };
-int dy[] = { 1, -1, 0, 0 };
- 
-void Input()
-{
-    cin >> N;
-    for (int i = 0; i < N; i++)
-    {
-        int x1, y1, x2, y2;
-        cin >> x1 >> y1 >> x2 >> y2;
- 
-        x1 = (x1 + 500) * 2;
-        y1 = (y1 + 500) * 2;
-        x2 = (x2 + 500) * 2;
-        y2 = (y2 + 500) * 2;
- 
-        for (int i = x1; i <= x2; i++)
-        {
-            MAP[y1][i] = 1;
-            MAP[y2][i] = 1;
-        }
-        for (int i = y1; i <= y2; i++)
-        {
-            MAP[i][x1] = 1;
-            MAP[i][x2] = 1;
-        }
-    }
+int N, res;
+int p[2002][2002];
+int dx[4] = { -1,0,0,1 };
+int dy[4] = { 0,-1,1,0 };
+
+void dfs(int x, int y) {
+	p[x][y] = 2;
+
+	for (int i = 0; i < 4; i++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if (nx < 0 || ny < 0 || nx>2000 || ny>2000) continue;
+		if (p[nx][ny] == 0 || p[nx][ny] == 2) continue;
+		dfs(nx, ny);
+	}
 }
- 
-void DFS(int y, int x)
+int main()
 {
-    if (y < 0 || x < 0 || x >= MAX || y >= MAX) return;
-    if (MAP[y][x] == 2 || MAP[y][x] == 0) return;
- 
-    MAP[y][x] = 2;
- 
-    for (int i = 0; i < 4; i++)
-    {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
- 
-        DFS(ny, nx);
-    }
-}
- 
-void Solution()
-{
-    int Pu_Cnt;
- 
-    Pu_Cnt = 0;
- 
-    for (int i = 0; i < MAX; i++)
-    {
-        for (int j = 0; j < MAX; j++)
-        {
-            if (MAP[i][j] == 1)
-            {
-                DFS(i, j);
-                Pu_Cnt++;
-            }
-        }
-    }
- 
-    if (MAP[1000][1000] == 2) Pu_Cnt--;
-    cout << Pu_Cnt << endl;
-}
- 
-void Solve()
-{
-    Input();
-    Solution();
-}
- 
-int main(void)
-{
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
- 
-//    freopen("Input.txt", "r", stdin);
-    Solve();
- 
-    return 0;
+	cin >> N;
+	int x1, y1, x2, y2;
+	for (int i = 0; i < N; i++) {
+		cin >> x1 >> y1 >> x2 >> y2;
+		x1 = (x1 + 500) * 2;
+		y1 = (y1 + 500) * 2;
+		x2 = (x2 + 500) * 2;
+		y2 = (y2 + 500) * 2;
+		for (int j = y1; j <= y2; j++) 
+			p[x1][j] = p[x2][j] = 1;
+		for (int j = x1; j <= x2; j++)
+			p[j][y1] = p[j][y2] = 1;
+	}
+
+	for (int i = 0; i <= 2000; i++) {
+		for (int j = 0; j <= 2000; j++) {
+			if (p[i][j] == 1) {
+				res++;
+				dfs(i, j);
+			}
+		}
+	}
+
+	if (p[1000][1000] == 2) res--; 
+	cout << res;
 }
