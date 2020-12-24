@@ -21,7 +21,7 @@ int main()
 	cin >> N;
 	int x1, y1, x2, y2;
 	for (int i = 0; i < N; i++) {
-		cin >> x1 >> y1 >> x2 >> y2;
+		cin >> x1 >> y1 >> x2 >> y2; //선형변환
 		x1 = (x1 + 500) * 2;
 		y1 = (y1 + 500) * 2;
 		x2 = (x2 + 500) * 2;
