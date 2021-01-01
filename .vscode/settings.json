@@ -62,7 +62,8 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "chrono": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "ratio": "cpp"
     },
     "cmake.configureOnOpen": false
 }
