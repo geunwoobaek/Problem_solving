@@ -63,7 +63,9 @@
         "xutility": "cpp",
         "chrono": "cpp",
         "valarray": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "iomanip": "cpp",
+        "regex": "cpp"
     },
     "cmake.configureOnOpen": false
 }
