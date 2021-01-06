@@ -65,7 +65,10 @@
         "valarray": "cpp",
         "ratio": "cpp",
         "iomanip": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "locale": "cpp",
+        "xlocbuf": "cpp",
+        "future": "cpp"
     },
     "cmake.configureOnOpen": false
 }
