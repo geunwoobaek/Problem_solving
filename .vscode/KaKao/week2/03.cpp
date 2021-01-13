@@ -13,7 +13,7 @@ bool check(vector<int>& stones, int k, int mid) {
 		else cnt = 0;
 	}
 	// 돌의 숫자가 0이되는 경우가 k번 이상 연속되지 않는다면 가능ㅃㅃ
-	return true;
+	  return true;
 }
 
 
