@@ -5,7 +5,7 @@ using namespace std;
 bool check(vector<int>& stones, int k, int mid) {
 	int cnt = 0;
 	for (int i = 0; i < stones.size(); i++) {
-		/// 현재 인원 수가 돌의 숫자보다 더 큰 경우가 k번 이상 연속된다면 불가능
+		// 현재 인원 수가 돌의 숫자보다 더 큰 경우가 k번 이상 연속된다면 불가능
 		if (stones[i] < mid) {
 			cnt++;
 			if (cnt >= k) return false;
