@@ -1,14 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Block { int y, x, shpae;};
+struct Block { int y, x, shpae; };
 int board_size;
-#define For(i, j, k) for (int i = j; i < k; i++)
-#define BlockSet vector<vector<Block>>
-#define It BlockSet::iterator 
-BlockSet Blocks(1); //블록 담겨있음
 
-void FillBlack(vector<vector<int>>& board)
+#define For(i, j, k) for (int i = j; i < k; i++)
+#define BlockVector vector<vector<Block>>
+#define It BlockVector::iterator 
+#define Board vector<vector<int>>
+
+BlockVector Blocks(1); //블록 담겨있음
+
+void FillBlack(Board& board)
 {
     For(x, 0, board_size)
     {
@@ -21,7 +24,7 @@ void FillBlack(vector<vector<int>>& board)
         }
     }
 }
-bool IsCanRemove(vector<vector<int>>& board, vector<Block>& block)
+bool IsCanRemove(Board& board, vector<Block>& block)
 {
     //가장Left,가장Right,가장위,가장아래
     //가로로 길이가 3
@@ -45,7 +48,7 @@ bool IsCanRemove(vector<vector<int>>& board, vector<Block>& block)
     }
     return true;
 }
-void Remove(vector<vector<int>>& board, BlockSet& Blocks, It& block)
+void Remove(Board& board, BlockVector& Blocks, It& block)
 {
     for (auto& one : *block)
     {
@@ -53,7 +56,7 @@ void Remove(vector<vector<int>>& board, BlockSet& Blocks, It& block)
     }
     block = Blocks.erase(block);
 }
-int solution(vector<vector<int>> board)
+int solution(Board board)
 {
     board_size = board.size();
     int numberofBlocks = 0;
@@ -69,6 +72,7 @@ int solution(vector<vector<int>> board)
                 Blocks[board[y][x] - 1].push_back({ y, x, board[y][x] });
         }
     }
+
     while (1)
     {
         FillBlack(board);
@@ -76,10 +80,10 @@ int solution(vector<vector<int>> board)
         It block = Blocks.begin();
         while (block != Blocks.end())
         {
-            if (IsCanRemove(board, *block))  
-            {   
-                 if(block->size()==0) numberofBlocks--;
-                 Remove(board, Blocks, block); //in board
+            if (IsCanRemove(board, *block))
+            {
+                if (block->size() == 0) numberofBlocks--;
+                Remove(board, Blocks, block); //in board
             }
             else block++;
         }
