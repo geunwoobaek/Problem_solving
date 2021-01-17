@@ -16,6 +16,7 @@ bool CanGo(int to) {
 }
 bool solution(int n, Vector path, Vector order)
 {
+    
     for (auto& now : order)
     {
         OrderToFromMap[now[1]].push_back(now[0]);
