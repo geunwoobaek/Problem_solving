@@ -19,12 +19,12 @@ bool solution(int n, Vector path, Vector order)
     
     for (auto& now : order)
     {
-        OrderToFromMap[now[1]].push_back(now[0]);
+            OrderToFromMap[now[1]].push_back(now[0]);
         OrderFromToMap[now[0]].push_back(now[1]);
     }
     for (auto& cur : path)
     {
-        Route[cur[0]].push_back(cur[1]);
+           Route[cur[0]].push_back(cur[1]);
         Route[cur[1]].push_back(cur[0]);
     }
     que.push(0);
