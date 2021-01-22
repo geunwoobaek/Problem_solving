@@ -1,63 +1,69 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define Vector vector<vector<int>>
-bool Visit[200000] = {
-    true,
-};
-Vector OrderToFromMap(200000); //key=방문하고 싶은 방 value=이전에 방문해야할방
-Vector OrderFromToMap(200000); //key=이전에 방문해야 할방 value=방문하고 싶은 방
-Vector Route(200000);
+#define maxNum 200001
+bool Visit[maxNum] = {true};
+Vector Path(maxNum);
+vector<int> Order(maxNum); //선결조건 ///Order[To]=From;
 queue<int> que;
-bool CanGo(int to) {
-    for (auto& from : OrderToFromMap[to]) {
-        if (!Visit[from]) return false;
-    }
-    return true;
-}
+vector<int> Candidate;
+int HowManyCount = 0;
+// BFS 탐색하다가 선결조건이 있는 노드를 만날 경우..
+// (1) 선결조건 충족O-> 탐색
+// (2) 선결조건 충족X  넘어가기! 후보군 리스트에 집어넣기
+// (3) 후보군 리스트들에 대해서 선결조건 채워졌는지 체크하고 집어넣기.
+// (4) 전부다탐색하면 탈출
+
 bool solution(int n, Vector path, Vector order)
 {
-    for (auto& now : order)
+    for (auto &now : path)
     {
-            OrderToFromMap[now[1]].push_back(now[0]);
-        OrderFromToMap[now[0]].push_back(now[1]);
+        Path[now[0]].push_back(now[1]);
+        Path[now[1]].push_back(now[0]);
     }
-    for (auto& cur : path)
-    {
-           Route[cur[0]].push_back(cur[1]);
-        Route[cur[1]].push_back(cur[0]);
-    }
+    for (auto &now : order)
+        Order[now[1]] = now[0]; //0이 해결되야 1을 할 수 있음
     que.push(0);
     while (!que.empty())
     {
-        int from = que.front();
-        que.pop();
-        for (auto& to : Route[from])
+        while (!que.empty())
         {
-            if (!Visit[to] && CanGo(to)) //push할조건
+            int from = que.front();
+          //  cout << "now = " << from << "\n";
+            HowManyCount++;
+            que.pop();
+            for (int to : Path[from])
             {
-                Visit[to] = true;
-                que.push(to);
-                DfsVisit(to);
+                if (Visit[to])
+                    continue; //방문했을시
+                else
+                {
+                    if (Visit[Order[to]]) //선결조건 방문했을시
+                    {
+                        que.push(to);
+                        Visit[to] = true;
+                    }
+                    else
+                        Candidate.push_back(to);
+                }
             }
         }
+
+        for (vector<int>::iterator it = Candidate.begin(); it != Candidate.end();)
+        {
+            if (Visit[Order[*it]])
+            {
+                que.push(*it);
+                Visit[*it] = true;
+                it = Candidate.erase(it);
+            }
+            else
+                it++;
+        }
     }
-    for (int i = 0; i < n; i++)
-        if (!Visit[i])
-            return false;
-    return true;
-}
-int main()
-{
-    solution(9,
-        { {0, 1},
-         {0, 3},
-         {0, 7},
-         {8, 1},
-         {3, 6},
-         {1, 2},
-         {4, 7},
-         {7, 5} },
-        { {8, 5},
-         {6, 7},
-         {4, 1} });
+    cout << HowManyCount;
+    if (HowManyCount == n)
+        return true;
+    else
+        return false;
 }
