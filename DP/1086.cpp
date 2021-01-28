@@ -13,6 +13,7 @@
 첫째 줄에 정답을 기약분수 형태로 출력한다.
  p/q꼴로 출력하며, p는 분자, q는 분모이다. 정답이 0인 경우는 0/1로, 1인 경우는 1/1로 출력한다.
 */
+#include<bits/stdc++.h>
 #include<iostream>
 #include<vector>
 #include<cstring>
