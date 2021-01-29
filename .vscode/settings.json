@@ -68,7 +68,8 @@
         "regex": "cpp",
         "locale": "cpp",
         "xlocbuf": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "random": "cpp"
     },
     "cmake.configureOnOpen": false
 }
