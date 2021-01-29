@@ -29,14 +29,14 @@ struct BinaryTree
             {   
                 now=next;
                 if (now->data == data) data++;
-                if (now->data > data)
+                if (now->data < data)
                 {
                     next = now->right;
                     if (next == NULL) now->right = new Node(data);
                 }
                 else
                 {
-                    now = now->left;
+                    next = now->left;
                     if (next == NULL) now->left = new Node(data);
                 }
             }
@@ -48,7 +48,6 @@ vector<ll> solution(ll k, vector<ll> room_number)
 {   
     vector<ll> answer;
     for (auto room : room_number)
-    
     {
         answer.push_back(Btree.insert(room));
     }
