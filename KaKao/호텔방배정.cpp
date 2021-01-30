@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
-vector<ll> hotel; //정렬되있음
+vector<ll> hotel; //고객이 예약한 방이 번호별 정렬되있음.
 bool isRange(int end, int start); //해당 범위에 빈방이 있는지 체크
 pair<int, bool> process1(ll &room); //고객이 원하는 지점에 빈방이 있는지 체크및 없다면 방의 위치 반환 
 ll process2(int start); //해당지점의 방위치부터 이분탐색으로 빈방의 위치를 찾음 
