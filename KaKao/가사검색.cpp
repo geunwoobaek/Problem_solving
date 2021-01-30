@@ -50,7 +50,7 @@ struct Trie{
     }
 };
  
-Trie *root[10001];
+Trie *root[10001]; //root[3] 2 
 Trie *reroot[10001];
  
 vector<int> solution(vector<string> words, vector<string> queries) {
