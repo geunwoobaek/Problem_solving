@@ -3,7 +3,9 @@ using namespace std;
 #define Board vector<vector<int>>
 int answer = 2e9;
 //방문처리를 해야하는데 중요한 포인트
-bool isVisit[(1 << 6) + 1][4][4][2]; //첫번째는 먹은카드에 관해서 비트연산 //두번째 세번째는 위치 4번쨰는 먹었나 안먹었나
+bool isVisit[(1 << 6) + 1][4][4][5][5]; //첫번째는 먹은카드에 관해서 비트연산 //두번째 세번째는 커서위치
+//4번째 5번째는 뒤집은카드위치
+int full;
 struct Dir
 {
     int y[4] = {0, 0, 1, -1};
@@ -12,95 +14,19 @@ struct Dir
 struct Cursor
 {
     int y, x;
-    int card = 0;   //현재 선택된 카드
-    int card_y = 0; // 위치
-    int card_x = 0; // 위치
+    int card = 0;   // 이전에 뒤집은 카드
+    int card_y = 4; //이전카드 위치 4는 뒤집은카드 없을때
+    int card_x = 4; //이전카드 위치 4는 뒤집은카드 없을때
     int eat = 0;
     //
 };
-
-bool isRange(Cursor &cursor)
-{
-    return cursor.y < 4 && cursor.y >= 0 && cursor.x < 4 && cursor.x >= 0;
-}
-void CtrlMove(Cursor &cursor, int cmd, Board &board)
-{
-    while (isRange(cursor) && board[cursor.y][cursor.x] == 0)
-    {
-        cursor.y += dir.y[cmd];
-        cursor.x += dir.x[cmd];
-    }
-    if (!isRange(cursor))
-    {
-        cursor.y -= dir.y[cmd];
-        cursor.x -= dir.x[cmd];
-    }
-}
-bool IsVisit(Cursor &cursor)
-{
-    return isVisit[cursor.eat][cursor.y][cursor.x][cursor.card != 0];
-}
-bool CheckVisit(Cursor &cursor)
-{
-    isVisit[cursor.eat][cursor.y][cursor.x][cursor.card != 0] = !isVisit[cursor.eat][cursor.y][cursor.x][cursor.card != 0];
-}
-void dfs(Board &board, Cursor cursor, int move_count, int card_count)
-{
-    if (answer <= move_count)
-        return;
-    if (card_count == 0)
-        answer = move_count;
-    //enter작업
-    if (board[cursor.y][cursor.x] != 0) //카드 잡힐경우 이때 이전에 잡았던 카드는 안됨.
-    {
-        Cursor copy = cursor;
-        copy.card=
-        int nowcard = board[cursor.y][cursor.x];      //현재카드
-        if (cursor.card != nowcard && !IsVisit(copy)) //이전카드가 다른카드일경우
-        {
-            copy.card_x = cursor.x;
-            copy.card_y = cursor.y;
-            copy.card = nowcard;
-            CheckVisit(copy);
-            dfs(board, copy, move_count + 1, card_count);
-            CheckVisit(copy);
-        }
-        else if (!IsVisit(copy) && cursor.card == nowcard && !(cursor.y == cursor.card_y && cursor.x == cursor.card_x)) //이전 짝찾았을경우
-        {
-            //이전에 선택한게 아니고 짝을 찾았을때
-            board[cursor.y][cursor.x] = board[cursor.card_y][cursor.card_x] = 0; //지우기
-            copy.eat += (1 << cursor.card);
-            copy.card = copy.card_x = copy.card_y = 0;
-            CheckVisit(copy);
-            dfs(board, copy, move_count + 1, card_count - 1);
-            CheckVisit(copy);
-            board[cursor.y][cursor.x] = board[cursor.card_y][cursor.card_x] = nowcard; //살려내기
-            return;
-        }
-    }
-    //단순이동+ctrl이동
-    for (int i = 0; i < 4; i++)
-    { //단순이동
-        Cursor copy = cursor;
-        copy.y += dir.y[i];
-        copy.x += dir.x[i];
-        if (isRange(copy) && !IsVisit(copy))
-        {
-            CheckVisit(copy);
-            dfs(board, copy, move_count + 1, card_count);
-            CheckVisit(copy);
-        }
-        //ctrl이동
-        Cursor ctrl_copy = cursor;
-        CtrlMove(ctrl_copy, i, board);
-        if (IsVisit(ctrl_copy))
-        {
-            CheckVisit(ctrl_copy);
-            dfs(board, ctrl_copy, move_count + 1, card_count);
-            CheckVisit(ctrl_copy);
-        }
-    }
-}
+bool isRange(Cursor &cursor);
+bool alreadyAteorNone(Cursor &cursor, int card);
+void CtrlMove(Cursor &cursor, int cmd, Board &board);
+bool IsVisit(Cursor &cursor);
+void CheckVisit(Cursor &cursor);
+void dfs(Board &board, Cursor cursor, int move_count);
+void godfs(Cursor &cursor, Board &board, int move_count);
 int solution(Board board, int r, int c)
 {
     Cursor cursor = {r, c};
@@ -113,8 +39,10 @@ int solution(Board board, int r, int c)
                 card_count++;
         }
     }
+    card_count /= 2;
+    full = (1 << card_count) - 1;
     CheckVisit(cursor);
-    dfs(board, cursor, 0, card_count / 2);
+    dfs(board, cursor, 0);
     return answer;
 }
 int main()
@@ -125,4 +53,86 @@ int main()
          {0, 0, 0, 2},
          {3, 0, 1, 0}},
         1, 0);
+}
+bool isRange(Cursor &cursor)
+{
+    return cursor.y < 4 && cursor.y >= 0 && cursor.x < 4 && cursor.x >= 0;
+}
+bool alreadyAteorNone(Cursor &cursor, int card)
+{ //이미 먹었거나 없는 블록일경우
+    return card == 0 || (card != 0 && (cursor.eat & card) != 0);
+}
+void CtrlMove(Cursor &cursor, int cmd, Board &board)
+{
+    int &card = board[cursor.y][cursor.x];
+    while (isRange(cursor) && alreadyAteorNone(cursor, card))
+    {
+        cursor.y += dir.y[cmd];
+        cursor.x += dir.x[cmd];
+    }
+    if (!isRange(cursor))
+    {
+        cursor.y -= dir.y[cmd];
+        cursor.x -= dir.x[cmd];
+    }
+}
+bool IsVisit(Cursor &cursor)
+{
+    return isVisit[cursor.eat][cursor.y][cursor.x][cursor.card_y][cursor.card_x];
+}
+void CheckVisit(Cursor &cursor)
+{
+    isVisit[cursor.eat][cursor.y][cursor.x][cursor.card_y][cursor.card_x] = !IsVisit(cursor);
+}
+void godfs(Cursor &cursor, Board &board, int move_count)
+{
+    if (!IsVisit(cursor))
+    {
+        CheckVisit(cursor);
+        dfs(board, cursor, move_count);
+        CheckVisit(cursor);
+    }
+}
+void dfs(Board &board, Cursor cursor, int move_count)
+{
+    if (answer <= move_count || move_count > 20)
+        return;
+    if (cursor.eat == full)
+        answer = move_count;
+    //do enter
+    Cursor temp = cursor;
+    temp.card = board[cursor.y][cursor.x];
+    temp.card_x = cursor.x;
+    temp.card_y = cursor.y;
+
+    if (!IsVisit(temp) && !alreadyAteorNone(cursor, temp.card)) //카드 잡힐경우 이때 이전에 잡았던 카드는 안됨.
+    {
+        Cursor temp2 = temp;
+        if (cursor.card != 0 && (temp.card != cursor.card)) //현재가지고있는카드는 0이아니고 서로다른카드일경우
+        {   
+            CheckVisit(temp2);
+            temp.card = 0;
+            temp.card_x = temp.card_y = 4;
+        }
+        else if (cursor.card == temp.card)
+        {   
+            CheckVisit(temp2);
+            temp.eat += (1 << (temp.card - 1));
+            temp.card = 0;
+            temp.card_x = 4;
+            temp.card_y = 4;
+        }
+        godfs(temp, board, move_count + 1);
+    }
+    //단순이동+ctrl이동
+    for (int i = 0; i < 4; i++)
+    { //단순이동
+        temp = cursor;
+        temp.y += dir.y[i];
+        temp.x += dir.x[i];
+        if (isRange(temp)) godfs(temp, board, move_count + 1);
+        temp = cursor;
+        CtrlMove(temp, i, board);
+        godfs(temp, board, move_count + 1);
+    }
 }
