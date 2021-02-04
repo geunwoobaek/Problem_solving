@@ -26,7 +26,7 @@ bool inRange(int y, int x){
 	return y>=0 && x>=0 && y<4 && x<4;
 }
 
-// 다익스트라를 이용한 최소 키보드 입력 횟수 반환
+// 다익스트라를 이용한 최소 키보드 입력 횟수 반환   
 int getDist(vector<vector<int>>& board, int y1, int x1, int y2, int x2){
 
 	priority_queue<Point> q;
