@@ -20,19 +20,20 @@ int solution(vector<int> food_times, long long k) {
         foodVec.push_back(it->first);
     
     int left=0;
-    int right=foodVec.size()-1;
+    int right=foodVec.back();
     while(left<right){
         int mid=(left+right)>>1;
-        ll midSum=findSum(food_times,foodVec[mid]);
+        ll midSum=findSum(food_times,mid);
         if(midSum>=k) right=mid;
         else left=mid+1;
     }
-    ll temp=findSum(food_times,foodVec[left]);
-    if(temp>=k) k-=findSum(food_times,foodVec[--left]);
+    ll temp=findSum(food_times,left);
+    if(temp>=k) k-=findSum(food_times,--left);
     else k-=temp;
+    cout<<"k="<<k<<", height="<<left;
     for(int i=0;i<food_times.size();i++){
         int food=food_times[i];
-        if(food>foodVec[left]) k--;
+        if(food>left) k--;
         if(k==0) return i+1;
     }
     return -1;
