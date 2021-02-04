@@ -10,14 +10,12 @@ int convert(string str)
 int sum[3600000];
 struct compare
 {
-    bool operator()(vector<int> a, vector<int> b) { return a[1] > b[1]; };
+    bool operator()(vector<int> a, vector<int> b) { return a[1] < b[1]; };
 };
 struct Point
 {
-    int start = 0, end = 0, sum = 0;
-    int length() { return end - start; }
-} cursor;
-Point record;
+    int start = 0, length = 0, sum = 0;
+} temp, record;
 int answer = 2e9;
 string convertTostr(int time)
 {
@@ -52,23 +50,41 @@ string solution(string play_time, string adv_time, vector<string> logs)
         int end_ = convert(log.substr(9));
         logvecs.push_back({start_, end_});
     }
-    sort(logvecs.begin(), logvecs.end(), cmp);
-    for (auto &now : logvecs)
-    {   if(now[0]>cursor.end){
-        cursor.start+=now[0]-cursor.end;
-        }
-        pq.push(now[1]);
+    sort(logvecs.begin(), logvecs.end()); //정렬
+
+    for (int i=0;i<logvecs.size()-1;i++)
+    {   
+        auto &cur=logvecs[i];
+        auto &next=logvecs[i+1];
+        pq.push(cur[1]);
         while (!pq.empty())
-        {
-            if (pq.top() < now[0])
+        {   
+            int p_=pq.top();
+            if (pq.top() < cur[0])
                 pq.pop();
+            else break;
         }
-        for (int i = now[0]; i <= now[1]; i++)
+        for (int k = cur[0]; k <= next[0]&&k<=cur[1]; k++)
         {
-            sum[i] = pq.size();
+            sum[k]+=pq.size();
         }
     }
-    return convertTostr(answer > 0 ? answer : 0);
+    for (int i = 0; i < 3600000; i++)
+    {
+        if (temp.length <= advtime)
+        {
+            temp.length++;
+            temp.sum += sum[i];
+        }
+        else
+        {
+            temp.start++;
+            temp.sum += (sum[i] - sum[temp.start]);
+        }
+        if (record.sum < temp.sum)
+            record.sum = temp.sum;
+    }
+    return convertTostr(record.sum);
 }
 
 int main()
