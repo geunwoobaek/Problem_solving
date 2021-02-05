@@ -3,24 +3,25 @@
 using namespace std;
 //지점갯수 n은 3 이상 200 이하인 자연수입니다. //s첫출발지점 a
 #define F(i, j, k) for (int i = j; i <= k; i++)
-int floaid[301][301];
+int floayd[301][301];
+int sum=1e9;
 int solution(int n, int s, int a, int b, vector<vector<int>> fares)
 {
     F(i, 1, n)
     {
         F(j, 1, n)
         {
-            floaid[i][j] = 1e9;
+            floayd[i][j] = 2e6;
         }
-        floaid[i][i] = 0;
+        floayd[i][i] = 0;
     }
     for (auto &fare : fares)
     {
         int from = fare[0];
         int to = fare[1];
         int cost = fare[2];
-        floaid[from][to]=cost;
-        floaid[to][from]=cost;
+        floayd[from][to]=cost;
+        floayd[to][from]=cost;
     }
     F(path, 1, n)
     {
@@ -28,12 +29,15 @@ int solution(int n, int s, int a, int b, vector<vector<int>> fares)
         {  
             F(to, 1, n) //언젠간 Path를거침
             {
-                floaid[start][to]=min(floaid[start][to],floaid[start][path]+floaid[path][to]);
+                floayd[start][to]=min(floayd[start][to],floayd[start][path]+floayd[path][to]);
             }
         }
     }
-    cout<<"";
-    return 1;
+    //sum[t][s]+sum[t][a]+sum[t][b]
+    F(path,1,n){
+        sum=min(sum,floayd[s][path]+floayd[path][a]+floayd[path][b]);
+    }
+    return sum;
 }
 int main()
 {
