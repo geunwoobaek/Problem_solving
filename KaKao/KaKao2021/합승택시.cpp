@@ -27,7 +27,7 @@ int solution(int n, int s, int a, int b, vector<vector<int>> fares)
     {
         F(start, 1, n) 
         {  
-            F(to, 1, n) //언젠간 Path를거침
+            F(to, 1, n) 
             {
                 floayd[start][to]=min(floayd[start][to],floayd[start][path]+floayd[path][to]);
             }

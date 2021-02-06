@@ -13,12 +13,12 @@ ll findSum(vector<int>& vec,int target){
 }
 int solution(vector<int> food_times, long long k) {
     k++;
-    for(auto food:food_times){
-        foodMap[food]++;
-    }
+   
     for(auto it=foodMap.begin();it!=foodMap.end();it++) //벡터에 구간합 구하기
         foodVec.push_back(it->first);
-    
+     for(auto food:food_times){
+        foodMap[food]++;
+    }
     int left=0;
     int right=foodVec.back();
     while(left<right){
@@ -27,9 +27,10 @@ int solution(vector<int> food_times, long long k) {
         if(midSum>=k) right=mid;
         else left=mid+1;
     }
+    //1 4 10 11 5-> 10 
     ll temp=findSum(food_times,left);
     if(temp>=k) k-=findSum(food_times,--left);
-    else k-=temp;
+    else k-=temp; //k<0 k>0
     cout<<"k="<<k<<", height="<<left;
     for(int i=0;i<food_times.size();i++){
         int food=food_times[i];
