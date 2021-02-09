@@ -146,6 +146,7 @@ vector<int> solution(vector<string> infos, vector<string> querys)
     for (auto &query : querys)
     {
         int num = infos.size();
+        
         vector<string> queryspilt = spilt(query, " ");
         vector<bool> checkvec(infos.size(), true);
         parameticSearch(num, checkvec, Score, stoi(queryspilt[7]),true);
