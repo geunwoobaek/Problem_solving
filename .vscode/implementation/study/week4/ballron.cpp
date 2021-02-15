@@ -2,11 +2,6 @@
 using namespace std;
 #define F(i, j, k) for (int i = j; i < k; i++)
 #define Max 1000001
-/*
-임의의 인접한 두 풍선을 고른 뒤, 두 풍선 중 하나를 터트립니다.
-터진 풍선으로 인해 풍선들 사이에 빈 공간이 생겼다면, 
-빈 공간이 없도록 풍선들을 중앙으로 밀착시킵니다.
-*/
 int dp[Max], dp2[Max];
 int solution(vector<int> a)
 {
