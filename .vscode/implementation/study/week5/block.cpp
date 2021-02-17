@@ -1,30 +1,25 @@
-#include <bits/stdc++.h>
+#include <string>
+#include <vector>
+#include <cmath>
+
 using namespace std;
-#define ll long long
-ll MaxNum=10000000L;
-int findGmax(ll begin)
-{ //begin보다 작은 가장큰약수 구하기
-    for (ll i=begin-1>MaxNum?MaxNum:begin-1;i>0; i--)
-    {
-        if (begin % i == 0) return i;
+
+int check(int n){
+    int num = sqrt(n);
+    for(int i = 2; i <= num; i++){
+        int quo = n / i;
+        if(n % i == 0 && n / i <= 10000000)
+            return n / i;
     }
     return 1;
 }
-vector<int> solution(long long begin, long long end)
-{
+
+vector<int> solution(long long begin, long long end) { 
     vector<int> answer;
-    if (begin == 1)
-    {
-        answer.push_back(0);
-        begin++;
+    
+    for(int i = begin; i <= end; i++){
+        answer.emplace_back(check(i));
     }
-    for (; begin <= end; begin++)
-    {
-        answer.push_back(findGmax(begin));
-    }
+    if(begin == 1) answer[0] = 0;
     return answer;
-}
-int main()
-{
-    solution(1, 10);
 }
