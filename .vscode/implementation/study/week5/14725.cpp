@@ -61,6 +61,7 @@ int main()
         }
     }
     for (auto it = root.begin(); it != root.end(); it++)
+    {
         it->second->search();
     }
     return 0;
