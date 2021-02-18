@@ -65,12 +65,15 @@ int getBottom(Horse &cur)
 }
 void swaping(Horse &cur)
 {
-    Horse bottom = horses[getBottom(cur)];
-    Horse top = horses[getTop(cur)];
-    Horse before=top;
-    while (bottom->num != top->num && before->num != bottom->num)
-    {   
-        bottom=top;
+    Horse *bottom = &horses[getBottom(cur)];
+    Horse *top = &horses[getTop(cur)];
+    Horse *before = top;
+    while (bottom->num != top->num && before != bottom)
+    {
+        swap(bottom->num, top->num);
+        before = top;
+        bottom = &horses[getUp(*bottom)];
+        top = &horses[getDown(*top)];
     }
 }
 void move(Horse &cur, int d)
@@ -89,7 +92,7 @@ void move(Horse &cur, int d)
             d = 3;
         next_y = cur.y + dy[d];
         next_x = cur.x + dx[d];
-        if (Map[next_y][next_x] == blue)
+        if (Map[next_y][next_x] == blue || next_y == 0 || next_y == N || next_x == 0 || next_x == N)
         {
             next_y = cur.y;
             next_x = cur.x;
@@ -104,7 +107,7 @@ void move(Horse &cur, int d)
             Horse &down = horses[HorseMap[next_y][next_x]];
             down.up_horse = cur.num;
             cur.down_horse = down.num;
-            MaxCount = max(MaxCount, 1 + getUpCount(cur), getDownCount(cur));
+            MaxCount = max(MaxCount, 1 + getUpCount(cur)+getDownCount(cur));
         }
         if (Map[next_y][next_x] == red)
         {
@@ -123,14 +126,14 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
     cin >> N >> K;
-    F(i, N, 1)
+    F(i,1,N)
     {
-        F(j, N, 1)
+        F(j,1,N)
         {
             cin >> Map[i][j];
         }
     }
-    F(i, K, 1)
+    F(i,1,K)
     {
         Horse horse;
         horse.num = i;
@@ -144,7 +147,7 @@ int main()
         //  isVisit[horses] = true;
         for (Horse &cur : horses)
         {
-            cur.move(cur.dir);
+            move(cur, cur.dir);
         }
     }
     if (MaxCount >= 4)
