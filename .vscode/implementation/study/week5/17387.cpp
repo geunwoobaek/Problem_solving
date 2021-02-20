@@ -77,7 +77,7 @@ void swaping(Horse &cur)
     }
 }
 void move(Horse &cur, int d)
-{
+{   //ffds
     int next_y = cur.y + dy[d];
     int next_x = cur.x + dx[d];
     if (Map[next_y][next_x] == blue || next_y == 0 || next_y == N || next_x == 0 || next_x == N)
