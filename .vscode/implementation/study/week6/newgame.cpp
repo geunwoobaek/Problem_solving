@@ -1,16 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define F(i, s, e) for (int i = s; i <= e; i++)
-int N, K;
-int Map[13][13];
-int Horse_Map[13][13];
-int dy[5] = {0, 0, 0, -1, 1}; //0 -> <- ^ v
-int dx[5] = {0, 1, -1, 0, 0};
+int N, K,  //map크기,말 갯수
+Map[13][13], Horse_Map[13][13], //color Map, 맨위의 말이 담겨져있는 맵
+dy[5] = {0, 0, 0, -1, 1}, dx[5] = {0, 1, -1, 0, 0}; //방향
 struct Horse
 {
-    int num, y, x, dir;
-    int up_horse = 0;
-    int down_horse = 0;
+    int num, y, x, dir, up_horse = 0, down_horse = 0;
 };
 enum
 {
@@ -21,9 +17,9 @@ enum
 vector<Horse> horses;
 bool IsRange(Horse &horse)
 {
-    return horse.y > 0 && horse.x > 0 && horse.y <= N && horse.x <= N;
+    return horse.y > 0 && horse.x > 0 && horse.y <= N && horse.x <= N && Map[horse.y][horse.x] != BLUE;
 }
-void SwapDir(Horse &horse)
+void swap_dir(Horse &horse)
 {
     if (horse.dir == 1)
         horse.dir = 2;
@@ -33,22 +29,6 @@ void SwapDir(Horse &horse)
         horse.dir = 4;
     else if (horse.dir == 4)
         horse.dir = 3;
-}
-int UP(int cur)
-{
-    Horse &horse = horses[cur];
-    if (horse.up_horse == 0)
-        return horse.num;
-    else
-        return UP(horse.up_horse);
-}
-int BOTTOM(int cur)
-{
-    Horse &horse = horses[cur];
-    if (horse.down_horse == 0)
-        return horse.num;
-    else
-        return BOTTOM(horse.down_horse);
 }
 void move_horse(Horse *horse, int dir)
 {
@@ -72,7 +52,7 @@ void move_horse(Horse *horse, int dir)
         }
         //4. Horse_Map변경
         Horse_Map[horse->y][horse->x] = horse->num;
-        //5. 이동한지점 위의 말변경및 horseMap변경
+        //5. 이동한지점 위의 말이동및 horseMap변경
         int up_horse = horse->up_horse;
         while (up_horse != 0)
         {
@@ -83,10 +63,10 @@ void move_horse(Horse *horse, int dir)
         }
     }
 }
-int TotalStack(int now)
+int count_horse(int now)
 {
     if (horses[now].down_horse != 0)
-        return 1 + TotalStack(horses[horses[now].down_horse].num);
+        return 1 + count_horse(horses[horses[now].down_horse].num);
     else
         return 1;
 }
@@ -109,35 +89,32 @@ int main()
     {
         for (auto &next : horses)
         {
-            Horse temp = next;
+            if (!IsRange(next))
+                continue;
+            Horse temp = next; //범위확인위해서
             temp.y += dy[temp.dir];
             temp.x += dx[temp.dir];
-            if (!IsRange(temp) || (Map[temp.y][temp.x] == BLUE)) //Blue일경우
-                SwapDir(next);                                   //방향변경
-            move_horse(&next, next.dir);      //말이동
+            if (!IsRange(temp))          //Blue이거나 범위 넘을 경우
+                swap_dir(next);           //방향변경
+            move_horse(&next, next.dir); //말이동
+            //1 3
             if (Map[next.y][next.x] == RED) //red일경우
             {
-                int up = Horse_Map[next.y][next.x];
-                int bottom=temp.down_horse;
-                while (up != bottom)
+                int up = Horse_Map[next.y][next.x]; //맨위의말
+                int bottom = next.down_horse;       //변하지 않는 지점의 바닥 말
+                while (up != bottom)                //맨위의말부터 change해주기
                 {
                     swap(horses[up].up_horse, horses[up].down_horse);
-                    up = horses[up].up_horse;
+                    up = horses[up].up_horse; //1->2->3
                 }
-                horses[Horse_Map[next.y][next.x]].down_horse=bottom; //
-                horses[up].up_horse=0;
-                Horse_Map[next.y][next.x] = temp.num;
+                horses[Horse_Map[next.y][next.x]].down_horse = bottom; //이전의 맨위의말의 아랫지점을 bottom으로 바꿔주기
+                horses[bottom].up_horse = Horse_Map[next.y][next.x];
+                next.up_horse = 0; //맨위의 위를 0으로 바꿔주기
+                Horse_Map[next.y][next.x] = next.num;
             }
-            if (TotalStack(Horse_Map[next.y][next.x]) >= 4) //갯수세기
+            if (IsRange(next) && count_horse(Horse_Map[next.y][next.x]) >= 4) //갯수세기
             {
-                // cout << "turn" << turn << ":\n";
-                // F(i, 1, N)
-                // {
-                //     F(j, 1, N)
-                //     cout << Horse_Map[i][j] << " ";
-                //     cout << "\n";
-                // }
-                std::cout << turn;
+                cout << turn;
                 exit(0);
             }
         }
