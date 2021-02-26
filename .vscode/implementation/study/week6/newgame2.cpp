@@ -8,12 +8,7 @@ struct Horse
 {
     int num, y, x, dir, up_horse = 0, down_horse = 0;
 };
-enum
-{
-    WHITE,
-    RED,
-    BLUE
-};
+enum{WHITE,RED,BLUE};
 vector<Horse> horses;
 bool IsRange(Horse &horse)
 {
