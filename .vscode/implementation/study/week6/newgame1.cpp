@@ -113,7 +113,7 @@ int main()
                 next.up_horse = 0; //맨위의 위를 0으로 바꿔주기
                 Horse_Map[next.y][next.x] = next.num;
             }
-            if (IsRange(next) && count_horse(Horse_Map[next.y][next.x]) >= 4) //갯수세기
+            if (IsRange(next) && count_horse(Horse_Map[next.y][next.x]) > 3) //갯수세기
             {
                 cout << turn;
                 exit(0);
