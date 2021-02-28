@@ -33,7 +33,6 @@ int solve(int len, int cur, int situ)
         ret %= 1000000000;
     }
     return ret %= 1000000000;
-    ;
 }
 int main()
 {
