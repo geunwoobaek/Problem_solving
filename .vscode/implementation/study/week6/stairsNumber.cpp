@@ -45,4 +45,4 @@ int main()
     cout << mod(mod(k) + mod(h))<<endl;
     cout << mod((k + h));
     return 0;
-}
+}   

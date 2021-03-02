@@ -90,5 +90,6 @@
         "thread": "cpp",
         "typeindex": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "python.pythonPath": "c:\\Users\\minso\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 }
