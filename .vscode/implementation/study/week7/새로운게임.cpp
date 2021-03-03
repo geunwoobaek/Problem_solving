@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
- 
 #define endl "\n"
 #define MAX 12
 #define CHESS_MAX 10
@@ -41,12 +40,6 @@ void Input()
  
 void Reverse_Chess(int x, int y)
 {
-    /* 
-    (x , y)에 존재하는 말의 순서를 뒤집는 함수 
-    - 'Temp' 라는 임시 벡터에 (x, y)에 있는 모든 말들을 옮겨주고 
-      거꾸로 (x, y)에 넣어주었다.
-    - 가장 아래에 위치한 말이 달라지니 Check.
-    */
     vector<int> Temp;
     for (int i = 0; i < MAP_State[x][y].size(); i++) Temp.push_back(MAP_State[x][y][i]);
     MAP_State[x][y].clear();
@@ -60,7 +53,6 @@ void Reverse_Chess(int x, int y)
  
 int Reverse_Dir(int d)
 {
-    /* 방향 전환 함수 */
     if (d == 1) return 2;
     else if (d == 2) return 1;
     else if (d == 3) return 4;
