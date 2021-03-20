@@ -58,7 +58,7 @@ vector<Block> comb_block(Board &board, int y, int x)
 }
 void go(int number, Board &board, vector<Block> blocks)
 {
-    //1.block을 해당블록의 시작지점으로 평행이동
+    //  
     int rotate_y = 100; //평행이동지점
     for (auto &block : blocks)
         rotate_y = min(rotate_y, block.y);
@@ -74,7 +74,7 @@ void go(int number, Board &board, vector<Block> blocks)
     while (before != score)
     {
         before = score;
-        for (int y = 5; y >=0; y++)
+        for (int y = 0; y <=5; y++)
         {
             int line_length = 0;
             for (int x = 0; x <= 3; x++)
@@ -87,7 +87,6 @@ void go(int number, Board &board, vector<Block> blocks)
                 for (int x = 0; x <= 3; x++)
                     board[y][x] = 0;
                 score++;
-                break;
             }
         }
         //4.이때 같은 블록은 같이 떨어져야함 //어떻게 체크하지
@@ -121,7 +120,7 @@ void go(int number, Board &board, vector<Block> blocks)
             }
         }
         //옅은부분 지우기
-        for (int y = howManyDown; y >= 0; y--)
+        for (int y = howManyDown-1; y >= 0; y--)
         {
             for (int x = 0; x <= 3; x++)
                 board[y][x] = 0;

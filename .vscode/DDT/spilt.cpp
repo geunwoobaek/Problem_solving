@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 
-vector<string> spilt(const string& str,const string& pattern) //직접spilt구현
+vector<string> spilt(string& str,string& pattern) //직접spilt구현
 {
     vector<string> answer;
     char _last = pattern.back();
