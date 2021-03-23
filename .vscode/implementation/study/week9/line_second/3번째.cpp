@@ -68,6 +68,8 @@ vector<bool> solution(string program, vector<string> flag_rules, vector<string> 
 {
     init();
     vector<bool> answer;
+    //-n string
+    // -n alias num
     for (int i = 0; i < flag_rules.size(); i++)
     {
         auto &flag = flag_rules[i];
