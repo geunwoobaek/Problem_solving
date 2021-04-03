@@ -3,7 +3,7 @@ using namespace std;
 unordered_map<int,int> um;
 void solution(vector<int>& arr){
 
-    for(int i:arr){
+    for(int i:arr){  
         um[i]++;
     }
     for(auto it=um.begin();it!=um.end();it++){
