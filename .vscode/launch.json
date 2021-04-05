@@ -2,15 +2,36 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "Launch example",
+      "request": "launch",
+      "mainClass": "example",
+      "projectName": "Problem_solving_9438c927"
+    },
+    {
+      "type": "java",
+      "name": "Launch problem2438",
+      "request": "launch",
+      "mainClass": "problem2438",
+      "projectName": "Problem_solving_9438c927"
+    },
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
       "name": "g++.exe build and debug active file",
       "type": "cppdbg",
       "request": "launch",
       "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
       "args": [
-        "--timeout " , 
-        "999999 " , 
+        "--timeout ",
+        "999999 "
       ],
-      "serverLaunchTimeout":123456789,
+      "serverLaunchTimeout": 123456789,
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
