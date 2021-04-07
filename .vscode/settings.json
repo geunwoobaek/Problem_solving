@@ -89,7 +89,13 @@
         "shared_mutex": "cpp",
         "thread": "cpp",
         "typeindex": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "stop_token": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     },
     "cmake.configureOnOpen": false,
     "python.pythonPath": "c:\\Users\\minso\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
