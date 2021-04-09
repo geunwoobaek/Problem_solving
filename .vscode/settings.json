@@ -95,7 +95,9 @@
         "stop_token": "cpp",
         "xlocmes": "cpp",
         "xlocmon": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "coroutine": "cpp",
+        "resumable": "cpp"
     },
     "cmake.configureOnOpen": false,
     "python.pythonPath": "c:\\Users\\minso\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
